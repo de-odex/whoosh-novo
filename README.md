@@ -1,24 +1,36 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/sygil-dev/whoosh-reloaded/badge/main)](https://www.codefactor.io/repository/github/sygil-dev/whoosh-reloaded/overview/main)
-[![codecov](https://codecov.io/gh/Sygil-Dev/whoosh-reloaded/graph/badge.svg?token=O3Z2DFB8UA)](https://codecov.io/gh/Sygil-Dev/whoosh-reloaded)
-[![Documentation Status](https://readthedocs.org/projects/whoosh-reloaded/badge/?version=latest)](https://whoosh-reloaded.readthedocs.io/en/latest/?badge=latest)
-[![PyPI version](https://badge.fury.io/py/Whoosh-Reloaded.svg)](https://badge.fury.io/py/Whoosh-Reloaded) [![Downloads](https://pepy.tech/badge/whoosh-reloaded)](https://pepy.tech/project/whoosh-reloaded) [![License](https://img.shields.io/pypi/l/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Wheel](https://img.shields.io/pypi/wheel/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Format](https://img.shields.io/pypi/format/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Status](https://img.shields.io/pypi/status/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/)
+<!-- [![CodeFactor](https://www.codefactor.io/repository/github/sygil-dev/whoosh-reloaded/badge/main)](https://www.codefactor.io/repository/github/sygil-dev/whoosh-reloaded/overview/main) -->
+<!-- [![codecov](https://codecov.io/gh/Sygil-Dev/whoosh-reloaded/graph/badge.svg?token=O3Z2DFB8UA)](https://codecov.io/gh/Sygil-Dev/whoosh-reloaded) -->
+<!-- [![Documentation Status](https://readthedocs.org/projects/whoosh-reloaded/badge/?version=latest)](https://whoosh-reloaded.readthedocs.io/en/latest/?badge=latest) -->
+<!-- [![PyPI version](https://badge.fury.io/py/Whoosh-Reloaded.svg)](https://badge.fury.io/py/Whoosh-Reloaded) [![Downloads](https://pepy.tech/badge/whoosh-reloaded)](https://pepy.tech/project/whoosh-reloaded) [![License](https://img.shields.io/pypi/l/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Wheel](https://img.shields.io/pypi/wheel/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Format](https://img.shields.io/pypi/format/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Status](https://img.shields.io/pypi/status/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) -->
 
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded)
+<!-- [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+<!-- [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
+
+<!-- -------------------------------------- -->
+
+> [!IMPORTANT]
+> This repository (**whoosh-novo**) is a fork and continuation of the Whoosh project. [Whoosh-Reloaded](https://github.com/Sygil-Dev/whoosh-reloaded) is mentioned to be actively maintained.
+
+> [!WARNING]
+> Compatibility will be best-effort, limited to maintained python versions (>=3.9). I am an amateur solo developer; mistakes will probably be made more often than usual.
+
+### Motivation:
+- update whoosh to have type annotations
+  - aim for 100% standard pyright conformance, and as much strict pyright conformance as possible
+- proposals for feature changes and additions
+  - probably will not be merged into `main` without external consultation
 
 --------------------------------------
 
-> **Notice:** This repository (**whoosh-reloaded**) is a fork and continuation of the Whoosh project.
-
-> This fork **is actively maintained** by the Sygil-Dev Organization.
+The original fork readme follows.
 
 --------------------------------------
 

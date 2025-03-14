@@ -150,3 +150,13 @@ max-args = 22  # Default is 5
 max-branches = 79  # Default is 12
 max-returns = 16  # Default is 6
 max-statements = 256  # Default is 50
+
+
+[tool.tox]
+requires = ["tox>=4"]
+env_list = ["py39", "py310", "py311", "py312", "py313"]
+
+[tool.tox.env_run_base]
+runner = "uv-venv-lock-runner"
+dependency_groups = ["test"]
+commands = [["pytest", { replace = "posargs", default = ["tests"], extend = true }]]

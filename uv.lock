@@ -312,10 +312,12 @@ dependencies = [
     { name = "cached-property" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 dev = [
     { name = "flynt" },
+    { name = "nose" },
     { name = "pre-commit" },
+    { name = "pytest" },
     { name = "ruff" },
 ]
 test = [
@@ -324,12 +326,17 @@ test = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "cached-property", specifier = "~=2.0.1" },
-    { name = "flynt", marker = "extra == 'dev'", specifier = "~=1.0.2" },
-    { name = "nose", marker = "extra == 'test'", specifier = "~=1.3.7" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = "~=4.1.0" },
-    { name = "pytest", marker = "extra == 'test'", specifier = "~=8.3.5" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.11.0" },
+requires-dist = [{ name = "cached-property", specifier = "~=2.0.1" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "flynt", specifier = "~=1.0.2" },
+    { name = "nose", specifier = "~=1.3.7" },
+    { name = "pre-commit", specifier = "~=4.1.0" },
+    { name = "pytest", specifier = "~=8.3.5" },
+    { name = "ruff", specifier = "~=0.11.0" },
 ]
-provides-extras = ["test", "dev"]
+test = [
+    { name = "nose", specifier = "~=1.3.7" },
+    { name = "pytest", specifier = "~=8.3.5" },
+]

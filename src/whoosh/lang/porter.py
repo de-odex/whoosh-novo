@@ -85,7 +85,7 @@ _step5 = re.compile("^(.+?)e$")
 # Stemming function
 
 
-def stem(w):
+def stem(w: str) -> str:
     """Uses the Porter stemming algorithm to remove suffixes from English
     words.
 

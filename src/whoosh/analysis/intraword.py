@@ -25,10 +25,18 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
+from __future__ import annotations
+
 import re
 from collections import deque
+from typing import TYPE_CHECKING
 
 from whoosh.analysis.filters import Filter
+
+if TYPE_CHECKING:
+    from collections.abc import Container, Generator, Sequence
+
+    from whoosh.analysis.acore import Token
 
 
 class CompoundWordFilter(Filter):
@@ -52,7 +60,10 @@ class CompoundWordFilter(Filter):
     ["I", "do", "not", "like", "green", "eggs", "and", "ham"]
     """
 
-    def __init__(self, wordset, keep_compound=True):
+    wordset: Container[str]
+    keep_compound: bool
+
+    def __init__(self, wordset: Container[str], keep_compound: bool = True):
         """
         :param wordset: an object with a ``__contains__`` method, such as a
             set, containing strings to look for inside the tokens.
@@ -63,7 +74,7 @@ class CompoundWordFilter(Filter):
         self.wordset = wordset
         self.keep_compound = keep_compound
 
-    def subwords(self, s, memo):
+    def subwords(self, s: str, memo: dict[str, list[str]]) -> list[str] | None:
         if s in self.wordset:
             return [s]
         if s in memo:
@@ -81,9 +92,9 @@ class CompoundWordFilter(Filter):
 
         return None
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         keep_compound = self.keep_compound
-        memo = {}
+        memo: dict[str, list[str]] = {}
         subwords = self.subwords
         for t in tokens:
             subs = subwords(t.text, memo)
@@ -115,10 +126,12 @@ class BiWordFilter(Filter):
     ``ShingleFilter(2)``.
     """
 
-    def __init__(self, sep="-"):
+    sep: str
+
+    def __init__(self, sep: str = "-"):
         self.sep = sep
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         sep = self.sep
         prev_text = None
         prev_startchar = None
@@ -186,14 +199,17 @@ class ShingleFilter(Filter):
     ``ShingleFilter``.
     """
 
-    def __init__(self, size=2, sep="-"):
+    size: int
+    sep: str
+
+    def __init__(self, size: int = 2, sep: str = "-"):
         self.size = size
         self.sep = sep
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         size = self.size
         sep = self.sep
-        buf = deque()
+        buf: deque[Token] = deque()
         atleastone = False
 
         def make_token():
@@ -277,21 +293,19 @@ class IntraWordFilter(Filter):
 
     is_morph = True
 
-    __inittypes__ = {
-        "delims": str,
-        "splitwords": bool,
-        "splitnums": bool,
-        "mergewords": bool,
-        "mergenums": bool,
-    }
+    delims: str
+    splitwords: bool
+    splitnums: bool
+    mergewords: bool
+    mergenums: bool
 
     def __init__(
         self,
-        delims="-_'\"()!@#$%^&*[]{}<>\\|;:,./?`~=+",
-        splitwords=True,
-        splitnums=True,
-        mergewords=False,
-        mergenums=False,
+        delims: str = "-_'\"()!@#$%^&*[]{}<>\\|;:,./?`~=+",
+        splitwords: bool = True,
+        splitnums: bool = True,
+        mergewords: bool = False,
+        mergenums: bool = False,
     ):
         """
         :param delims: a string of delimiter characters.
@@ -332,14 +346,14 @@ class IntraWordFilter(Filter):
         self.mergewords = mergewords
         self.mergenums = mergenums
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.__dict__ == other.__dict__
         )
 
-    def _split(self, string):
+    def _split(self, string: str) -> Generator[tuple[int, int]]:
         bound = self.boundary
 
         # Yields (startchar, endchar) pairs for each indexable substring in
@@ -351,6 +365,7 @@ class IntraWordFilter(Filter):
 
         # Make a list (dispos, for "dispossessed") of (startchar, endchar)
         # pairs for runs of text between "'s"
+        dispos: Sequence[tuple[int, int]]
         if "'" in string:
             # Split on possessive 's
             dispos = []
@@ -390,7 +405,7 @@ class IntraWordFilter(Filter):
                     # Not splitting on transitions, just yield the part
                     yield (part_start, part_end)
 
-    def _merge(self, parts):
+    def _merge(self, parts: list[tuple[str, int, int, int]]):
         mergewords = self.mergewords
         mergenums = self.mergenums
 
@@ -399,15 +414,15 @@ class IntraWordFilter(Filter):
         # Where to insert a merged term in the original list
         insertat = 0
         # Buffer for parts to merge
-        buf = []
+        buf: list[tuple[str, int, int, int]] = []
         # Iterate on a copy of the parts list so we can modify the original as
         # we go
 
-        def insert_item(buf, at, newpos):
+        def insert_item(buf: list[tuple[str, int, int, int]], at: int, newpos: int):
             newtext = "".join(item[0] for item in buf)
             newsc = buf[0][2]  # start char of first item in buffer
             newec = buf[-1][3]  # end char of last item in buffer
-            parts.insert(insertat, (newtext, newpos, newsc, newec))
+            parts.insert(at, (newtext, newpos, newsc, newec))
 
         for item in list(parts):
             # item = (text, pos, startchar, endchar)
@@ -448,7 +463,7 @@ class IntraWordFilter(Filter):
         if len(buf) > 1:
             insert_item(buf, len(parts), pos)
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         mergewords = self.mergewords
         mergenums = self.mergenums
 

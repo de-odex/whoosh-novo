@@ -25,10 +25,19 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Optional
+
 from whoosh.analysis.filters import Filter
 from whoosh.lang.dmetaphone import double_metaphone
 from whoosh.lang.porter import stem
 from whoosh.util.cache import lfu_cache, unbound_cache
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Collection, Generator
+
+    from whoosh.analysis.acore import Token
 
 
 class StemFilter(Filter):
@@ -65,11 +74,21 @@ class StemFilter(Filter):
     stemmers in that library.
     """
 
-    __inittypes__ = {"stemfn": object, "ignore": list}
-
     is_morph = True
 
-    def __init__(self, stemfn=stem, lang=None, ignore=None, cachesize=50000):
+    stemfn: Callable[[str], str]
+    _stem: Callable[[str], str]
+    lang: str | None
+    ignore: Collection[str]
+    cachesize: int | None
+
+    def __init__(
+        self,
+        stemfn: Callable[[str], str] = stem,
+        lang: str | None = None,
+        ignore: Collection[str] | None = None,
+        cachesize: int | None = 50000,
+    ):
         """
         :param stemfn: the function to use for stemming.
         :param lang: if not None, overrides the stemfn with a language stemmer
@@ -93,7 +112,7 @@ class StemFilter(Filter):
         # attribute from the state
         return {k: self.__dict__[k] for k in self.__dict__ if k != "_stem"}
 
-    def __setstate__(self, state):
+    def __setstate__(self, state: dict[str, Any]):
         # Check for old instances of StemFilter class, which didn't have a
         # cachesize attribute and pickled the cache attribute
         if "cachesize" not in state:
@@ -128,16 +147,19 @@ class StemFilter(Filter):
             self._stem = stemfn
 
     def cache_info(self):
+        # NOTE: (de-odex) this is horrifying in a typing sense
         if self.cachesize <= 1:
             return None
         return self._stem.cache_info()
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other and self.__class__ is other.__class__ and self.stemfn == other.stemfn
+            other is not None
+            and isinstance(other, type(self))
+            and self.stemfn == other.stemfn
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         stemfn = self._stem
         ignore = self.ignore
 
@@ -157,7 +179,12 @@ class PyStemmerFilter(StemFilter):
     >>> PyStemmerFilter("spanish")
     """
 
-    def __init__(self, lang="english", ignore=None, cachesize=10000):
+    def __init__(
+        self,
+        lang: str = "english",
+        ignore: Collection[str] | None = None,
+        cachesize: int | None = 10000,
+    ):
         """
         :param lang: a string identifying the stemming algorithm to use. You
             can get a list of available algorithms by with the
@@ -174,31 +201,31 @@ class PyStemmerFilter(StemFilter):
         self.cachesize = cachesize
         self._stem = self._get_stemmer_fn()
 
-    def algorithms(self):
+    def algorithms(self):  # type: ignore
         """Returns a list of stemming algorithms provided by the py-stemmer
         library.
         """
 
         import Stemmer  # type: ignore @UnresolvedImport
 
-        return Stemmer.algorithms()
+        return Stemmer.algorithms()  # type: ignore
 
     def cache_info(self):
         return None
 
-    def _get_stemmer_fn(self):
+    def _get_stemmer_fn(self):  # type: ignore
         import Stemmer  # type: ignore @UnresolvedImport
 
-        stemmer = Stemmer.Stemmer(self.lang)
+        stemmer = Stemmer.Stemmer(self.lang)  # type: ignore
         stemmer.maxCacheSize = self.cachesize
-        return stemmer.stemWord
+        return stemmer.stemWord  # type: ignore
 
-    def __getstate__(self):
+    def __getstate__(self) -> dict[str, Any]:
         # Can't pickle a dynamic function, so we have to remove the _stem
         # attribute from the state
         return {k: self.__dict__[k] for k in self.__dict__ if k != "_stem"}
 
-    def __setstate__(self, state):
+    def __setstate__(self, state: dict[str, Any]):
         # Check for old instances of StemFilter class, which didn't have a
         # cachesize attribute and pickled the cache attribute
         if "cachesize" not in state:
@@ -225,7 +252,16 @@ class DoubleMetaphoneFilter(Filter):
 
     is_morph = True
 
-    def __init__(self, primary_boost=1.0, secondary_boost=0.5, combine=False):
+    primary_boost: float
+    secondary_boost: float
+    combine: bool
+
+    def __init__(
+        self,
+        primary_boost: float = 1.0,
+        secondary_boost: float = 0.5,
+        combine: bool = False,
+    ):
         """
         :param primary_boost: the boost to apply to the token containing the
             primary code.
@@ -239,14 +275,14 @@ class DoubleMetaphoneFilter(Filter):
         self.secondary_boost = secondary_boost
         self.combine = combine
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.primary_boost == other.primary_boost
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         primary_boost = self.primary_boost
         secondary_boost = self.secondary_boost
         combine = self.combine

@@ -27,6 +27,12 @@
 
 
 # Exceptions
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Collection
 
 
 class NoStemmer(Exception):
@@ -111,7 +117,7 @@ aliases = {
 }
 
 
-def two_letter_code(name):
+def two_letter_code(name: str) -> str | None:
     if name in languages:
         return name
     if name in aliases:
@@ -122,21 +128,21 @@ def two_letter_code(name):
 # Getter functions
 
 
-def has_stemmer(lang):
+def has_stemmer(lang: str) -> bool:
     try:
         return bool(stemmer_for_language(lang))
     except NoStemmer:
         return False
 
 
-def has_stopwords(lang):
+def has_stopwords(lang: str) -> bool:
     try:
         return bool(stopwords_for_language(lang))
     except NoStopWords:
         return False
 
 
-def stemmer_for_language(lang):
+def stemmer_for_language(lang: str) -> Callable[[str], str]:
     if lang == "en_porter":
         # Original porter stemming algorithm is several times faster than the
         # more correct porter2 algorithm in snowball package
@@ -154,12 +160,13 @@ def stemmer_for_language(lang):
     from .snowball import classes as snowball_classes
 
     if tlc in snowball_classes:
-        return snowball_classes[tlc]().stem
+        # NOTE: Cannot access attribute "stem" for class "_ScandinavianStemmer"
+        return snowball_classes[tlc]().stem  # type: ignore
 
     raise NoStemmer(f"No stemmer available for {lang!r}")
 
 
-def stopwords_for_language(lang):
+def stopwords_for_language(lang: str) -> Collection[str]:
     from .stopwords import stoplists
 
     tlc = two_letter_code(lang)

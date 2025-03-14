@@ -61,7 +61,6 @@ a filter first or a tokenizer after the first item).
 """
 
 from whoosh.analysis.acore import (
-    Composable,
     CompositionError,
     Token,
     entoken,
@@ -81,7 +80,6 @@ from whoosh.analysis.analyzers import (
 from whoosh.analysis.filters import (
     STOP_WORDS,
     CharsetFilter,
-    Composable,
     DelimitedAttributeFilter,
     Filter,
     LoggingFilter,

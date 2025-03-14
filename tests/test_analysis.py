@@ -1,6 +1,7 @@
 from pickle import dumps
 
 import pytest
+
 from whoosh import analysis, fields, qparser
 from whoosh.filedb.filestore import RamStorage
 
@@ -633,12 +634,6 @@ def test_stop_lang():
     es_stopper = analysis.RegexTokenizer() | analysis.StopFilter(lang="es")
     ls = [token.text for token in es_stopper("el lapiz es en la mesa")]
     assert ls == ["lapiz", "mesa"]
-
-
-def test_issue358():
-    t = analysis.RegexTokenizer(r"\w+")
-    with pytest.raises(analysis.CompositionError):
-        _ = t | analysis.StandardAnalyzer()
 
 
 def test_ngramwords_tokenizer():

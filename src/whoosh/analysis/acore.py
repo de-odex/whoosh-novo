@@ -28,6 +28,10 @@
 # Exceptions
 
 
+from collections.abc import Generator, Iterable
+from typing import Any
+
+
 class CompositionError(Exception):
     pass
 
@@ -35,13 +39,18 @@ class CompositionError(Exception):
 # Utility functions
 
 
-def unstopped(tokenstream):
+def unstopped(tokenstream: Generator["Token"]) -> Generator["Token", None, None]:
     """Removes tokens from a token stream where token.stopped = True."""
     return (t for t in tokenstream if not t.stopped)
 
 
 def entoken(
-    textstream, positions=False, chars=False, start_pos=0, start_char=0, **kwargs
+    textstream: Iterable[str],
+    positions: bool = False,
+    chars: bool = False,
+    start_pos: int = 0,
+    start_char: int = 0,
+    **kwargs: Any,
 ):
     """Takes a sequence of unicode strings and yields a series of Token objects
     (actually the same Token object over and over, for performance reasons),
@@ -101,8 +110,27 @@ class Token:
     ...or, call token.copy() to get a copy of the token object.
     """
 
+    text: str
+    original: str
+    pos: int
+    startchar: int
+    endchar: int
+
+    positions: bool
+    chars: bool
+    stopped: bool
+    removestops: bool
+
+    boost: float
+    mode: str
+
     def __init__(
-        self, positions=False, chars=False, removestops=True, mode="", **kwargs
+        self,
+        positions: bool = False,
+        chars: bool = False,
+        removestops: bool = True,
+        mode: str = "",
+        **kwargs: Any,
     ):
         """
         :param positions: Whether tokens should have the token position in the
@@ -130,28 +158,3 @@ class Token:
     def copy(self):
         # This is faster than using the copy module
         return Token(**self.__dict__)
-
-
-# Composition support
-
-
-class Composable:
-    is_morph = False
-
-    def __or__(self, other):
-        from whoosh.analysis.analyzers import CompositeAnalyzer
-
-        if not isinstance(other, Composable):
-            raise TypeError(f"{self!r} is not composable with {other!r}")
-        return CompositeAnalyzer(self, other)
-
-    def __repr__(self):
-        attrs = ""
-        if self.__dict__:
-            attrs = ", ".join(
-                f"{key}={value!r}" for key, value in self.__dict__.items()
-            )
-        return self.__class__.__name__ + f"({attrs})"
-
-    def has_morph(self):
-        return self.is_morph

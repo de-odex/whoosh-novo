@@ -551,7 +551,7 @@ for rule in _endings:
 _doubles = frozenset(("dd", "gg", "ll", "mm", "nn", "pp", "rr", "ss", "tt"))
 
 
-def fix_ending(word):
+def fix_ending(word: str) -> str:
     if word[-2:] in _doubles:
         word = word[:-1]
 
@@ -569,6 +569,6 @@ def fix_ending(word):
     return word
 
 
-def stem(word):
+def stem(word: str) -> str:
     """Returns the stemmed version of the argument string."""
     return fix_ending(remove_ending(word))

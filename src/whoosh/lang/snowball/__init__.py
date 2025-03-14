@@ -38,6 +38,9 @@ Snowball, because he invented a programming language with this name for
 creating new stemming algorithms. There is more information available at
 http://snowball.tartarus.org/
 """
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from .danish import DanishStemmer
 from .dutch import DutchStemmer
@@ -54,9 +57,15 @@ from .russian import RussianStemmer
 from .spanish import SpanishStemmer
 from .swedish import SwedishStemmer
 
+if TYPE_CHECKING:
+    from .bases import _ScandinavianStemmer, _StandardStemmer
+
 # Map two-letter codes to stemming classes
 
-classes = {
+classes: dict[
+    str,
+    type[_ScandinavianStemmer | _StandardStemmer | HungarianStemmer | RussianStemmer],
+] = {
     "da": DanishStemmer,
     "nl": DutchStemmer,
     "en": EnglishStemmer,

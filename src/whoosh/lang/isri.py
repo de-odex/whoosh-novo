@@ -33,8 +33,10 @@ discarded because it increases the word ambiguities and changes the original
 root.
 """
 
+from __future__ import annotations
 
 import re
+from typing import Literal
 
 
 class ISRIStemmer:
@@ -181,7 +183,7 @@ class ISRIStemmer:
             "\u0627\u0644\u0630\u0649",
         ]
 
-    def stem(self, token):
+    def stem(self, token: str) -> str:
         """
         Stemming a word token using the ISRI stemmer.
         """
@@ -218,7 +220,7 @@ class ISRIStemmer:
                 return self.stm
         return self.stm  # if word length >7 , then no stemming
 
-    def norm(self, num):
+    def norm(self, num: Literal[1, 2, 3]):
         """
         normalization:
         num=1  normalize diacritics

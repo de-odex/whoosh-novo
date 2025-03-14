@@ -24,9 +24,12 @@
 # The views and conclusions contained in the software and documentation are
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
+from __future__ import annotations
 
-from whoosh.analysis.acore import Composable, CompositionError
-from whoosh.analysis.filters import STOP_WORDS, LowercaseFilter, StopFilter
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any, Protocol
+
+from whoosh.analysis.filters import STOP_WORDS, Filter, LowercaseFilter, StopFilter
 from whoosh.analysis.intraword import IntraWordFilter
 from whoosh.analysis.morph import StemFilter
 from whoosh.analysis.tokenizers import (
@@ -39,87 +42,95 @@ from whoosh.analysis.tokenizers import (
 )
 from whoosh.lang.porter import stem
 
+if TYPE_CHECKING:
+    from collections.abc import Callable, Collection, Generator
+    from re import Pattern
+
+    from whoosh.analysis.acore import Token
+
 # Analyzers
 
 
-class Analyzer(Composable):
+class Analyzer(Protocol):
     """Abstract base class for analyzers."""
 
     def __repr__(self):
         return f"{self.__class__.__name__}()"
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.__dict__ == other.__dict__
         )
 
-    def __call__(self, value, **kwargs):
+    @abstractmethod
+    def __call__(self, value: str, **kwargs: Any) -> Generator[Token]:
         raise NotImplementedError
 
-    def clean(self):
-        # This method is intentionally left empty.
-        pass
+    @abstractmethod
+    def clean(self) -> None:
+        raise NotImplementedError
 
 
 class CompositeAnalyzer(Analyzer):
-    def __init__(self, *composables):
-        self.items = []
+    tokenizer: Tokenizer
+    filters: list[Filter]
 
-        for comp in composables:
-            if isinstance(comp, CompositeAnalyzer):
-                self.items.extend(comp.items)
-            else:
-                self.items.append(comp)
+    def __init__(self, tokenizer: Tokenizer, *filters: Filter):
+        self.tokenizer = tokenizer
+        self.filters = []
 
-        # Tokenizers must start a chain, and then only filters after that
-        # (because analyzers take a string and return a generator of tokens,
-        # and filters take and return generators of tokens)
-        for item in self.items[1:]:
-            if isinstance(item, Tokenizer):
-                raise CompositionError(
-                    f"Only one tokenizer allowed at the start of the analyzer: {self.items}"
-                )
+        for filter in filters:
+            self.filters.append(filter)
 
     def __repr__(self):
         return "{}({})".format(
             self.__class__.__name__,
-            ", ".join(repr(item) for item in self.items),
+            ", ".join(repr(item) for item in self.filters),
         )
 
-    def __call__(self, value, no_morph=False, **kwargs):
-        items = self.items
+    def __call__(
+        self, value: str, no_morph: bool = False, **kwargs: Any
+    ) -> Generator[Token]:
         # Start with tokenizer
-        gen = items[0](value, **kwargs)
+        gen = self.tokenizer(value, **kwargs)
         # Run filters
-        for item in items[1:]:
+        for item in self.filters:
             if not (no_morph and hasattr(item, "is_morph") and item.is_morph):
                 gen = item(gen)
         return gen
 
-    def __getitem__(self, item):
-        return self.items.__getitem__(item)
+    def __getitem__(self, item: int) -> Tokenizer | Filter:
+        return [self.tokenizer, *self.filters].__getitem__(item)  # type: ignore
 
     def __len__(self):
-        return len(self.items)
+        return len(self.filters)
 
-    def __eq__(self, other):
-        return other and self.__class__ is other.__class__ and self.items == other.items
+    def __eq__(self, other: object):
+        return (
+            other is not None
+            and isinstance(other, type(self))
+            and self.filters == other.filters
+        )
+
+    def __or__(self, other: Filter) -> CompositeAnalyzer:
+        if not isinstance(other, Filter):  # type: ignore
+            raise TypeError(f"{self!r} is not composable with {other!r}")
+        return CompositeAnalyzer(self.tokenizer, *self.filters, other)
 
     def clean(self):
-        for item in self.items:
-            if hasattr(item, "clean"):
-                item.clean()
+        for item in self.filters:
+            item.clean()
 
     def has_morph(self):
-        return any(item.is_morph for item in self.items)
+        return any(item.is_morph for item in self.filters)
 
 
 # Functions that return composed analyzers
 
 
-def IDAnalyzer(lowercase=False):
+def IDAnalyzer(lowercase: bool = False) -> Analyzer:
     """Deprecated, just use an IDTokenizer directly, with a LowercaseFilter if
     desired.
     """
@@ -130,7 +141,7 @@ def IDAnalyzer(lowercase=False):
     return tokenizer
 
 
-def KeywordAnalyzer(lowercase=False, commas=False):
+def KeywordAnalyzer(lowercase: bool = False, commas: bool = False) -> Analyzer:
     """Parses whitespace- or comma-separated tokens.
 
     >>> ana = KeywordAnalyzer()
@@ -151,13 +162,17 @@ def KeywordAnalyzer(lowercase=False, commas=False):
     return tokenizer
 
 
-def RegexAnalyzer(expression=r"\w+(\.?\w+)*", gaps=False):
+def RegexAnalyzer(
+    expression: str | Pattern[str] = r"\w+(\.?\w+)*", gaps: bool = False
+) -> RegexTokenizer:
     """Deprecated, just use a RegexTokenizer directly."""
 
     return RegexTokenizer(expression=expression, gaps=gaps)
 
 
-def SimpleAnalyzer(expression=default_pattern, gaps=False):
+def SimpleAnalyzer(
+    expression: str | Pattern[str] = default_pattern, gaps: bool = False
+) -> CompositeAnalyzer:
     """Composes a RegexTokenizer with a LowercaseFilter.
 
     >>> ana = SimpleAnalyzer()
@@ -173,8 +188,12 @@ def SimpleAnalyzer(expression=default_pattern, gaps=False):
 
 
 def StandardAnalyzer(
-    expression=default_pattern, stoplist=STOP_WORDS, minsize=2, maxsize=None, gaps=False
-):
+    expression: str | Pattern[str] = default_pattern,
+    stoplist: Collection[str] | None = STOP_WORDS,
+    minsize: int = 2,
+    maxsize: int | None = None,
+    gaps: bool = False,
+) -> CompositeAnalyzer:
     """Composes a RegexTokenizer with a LowercaseFilter and optional
     StopFilter.
 
@@ -199,15 +218,15 @@ def StandardAnalyzer(
 
 
 def StemmingAnalyzer(
-    expression=default_pattern,
-    stoplist=STOP_WORDS,
-    minsize=2,
-    maxsize=None,
-    gaps=False,
-    stemfn=stem,
-    ignore=None,
-    cachesize=50000,
-):
+    expression: str | Pattern[str] = default_pattern,
+    stoplist: Collection[str] | None = STOP_WORDS,
+    minsize: int = 2,
+    maxsize: int | None = None,
+    gaps: bool = False,
+    stemfn: Callable[[str], str] = stem,
+    ignore: Collection[str] | None = None,
+    cachesize: int | None = 50000,
+) -> CompositeAnalyzer:
     """Composes a RegexTokenizer with a lower case filter, an optional stop
     filter, and a stemming filter.
 
@@ -236,15 +255,15 @@ def StemmingAnalyzer(
 
 
 def FancyAnalyzer(
-    expression=r"\s+",
-    stoplist=STOP_WORDS,
-    minsize=2,
-    gaps=True,
-    splitwords=True,
-    splitnums=True,
-    mergewords=False,
-    mergenums=False,
-):
+    expression: str | Pattern[str] = r"\s+",
+    stoplist: Collection[str] = STOP_WORDS,
+    minsize: int = 2,
+    gaps: bool = True,
+    splitwords: bool = True,
+    splitnums: bool = True,
+    mergewords: bool = False,
+    mergenums: bool = False,
+) -> CompositeAnalyzer:
     """Composes a RegexTokenizer with an IntraWordFilter, LowercaseFilter, and
     StopFilter.
 
@@ -274,7 +293,12 @@ def FancyAnalyzer(
     )
 
 
-def LanguageAnalyzer(lang, expression=default_pattern, gaps=False, cachesize=50000):
+def LanguageAnalyzer(
+    lang: str,
+    expression: str | Pattern[str] = default_pattern,
+    gaps: bool = False,
+    cachesize: int | None = 50000,
+) -> CompositeAnalyzer:
     """Configures a simple analyzer for the given language, with a
     LowercaseFilter, StopFilter, and StemFilter.
 

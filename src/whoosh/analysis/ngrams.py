@@ -25,9 +25,16 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Literal
+
 from whoosh.analysis.acore import Token
 from whoosh.analysis.filters import Filter, LowercaseFilter
 from whoosh.analysis.tokenizers import RegexTokenizer, Tokenizer
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 # Tokenizer
 
@@ -50,7 +57,7 @@ class NgramTokenizer(Tokenizer):
 
     __inittypes__ = {"minsize": int, "maxsize": int}
 
-    def __init__(self, minsize, maxsize=None):
+    def __init__(self, minsize: int, maxsize: int | None = None):
         """
         :param minsize: The minimum size of the N-grams.
         :param maxsize: The maximum size of the N-grams. If you omit
@@ -60,24 +67,24 @@ class NgramTokenizer(Tokenizer):
         self.min = minsize
         self.max = maxsize or minsize
 
-    def __eq__(self, other):
-        if self.__class__ is other.__class__:
+    def __eq__(self, other: object):
+        if isinstance(other, type(self)):
             if self.min == other.min and self.max == other.max:
                 return True
         return False
 
     def __call__(
         self,
-        value,
-        positions=False,
-        chars=False,
-        keeporiginal=False,
-        removestops=True,
-        start_pos=0,
-        start_char=0,
-        mode="",
-        **kwargs,
-    ):
+        value: str,
+        positions: bool = False,
+        chars: bool = False,
+        keeporiginal: bool = False,
+        removestops: bool = True,
+        start_pos: int = 0,
+        start_char: int = 0,
+        mode: str = "",
+        **kwargs: Any,
+    ) -> Generator[Token]:
         assert isinstance(value, str), f"{value!r} is not unicode"
 
         inlen = len(value)
@@ -136,7 +143,12 @@ class NgramFilter(Filter):
 
     __inittypes__ = {"minsize": int, "maxsize": int}
 
-    def __init__(self, minsize, maxsize=None, at=None):
+    def __init__(
+        self,
+        minsize: int,
+        maxsize: int | None = None,
+        at: Literal["start", "end"] | None = None,
+    ):
         """
         :param minsize: The minimum size of the N-grams.
         :param maxsize: The maximum size of the N-grams. If you omit this
@@ -154,15 +166,15 @@ class NgramFilter(Filter):
         elif at == "end":
             self.at = 1
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.min == other.min
             and self.max == other.max
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         assert hasattr(tokens, "__iter__")
         at = self.at
         for t in tokens:
@@ -233,7 +245,7 @@ class NgramFilter(Filter):
 # Analyzers
 
 
-def NgramAnalyzer(minsize, maxsize=None):
+def NgramAnalyzer(minsize: int, maxsize: int | None = None):
     """Composes an NgramTokenizer and a LowercaseFilter.
 
     >>> ana = NgramAnalyzer(4)
@@ -244,7 +256,12 @@ def NgramAnalyzer(minsize, maxsize=None):
     return NgramTokenizer(minsize, maxsize=maxsize) | LowercaseFilter()
 
 
-def NgramWordAnalyzer(minsize, maxsize=None, tokenizer=None, at=None):
+def NgramWordAnalyzer(
+    minsize: int,
+    maxsize: int | None = None,
+    tokenizer: Tokenizer | None = None,
+    at: Literal["start", "end"] | None = None,
+):
     if not tokenizer:
         tokenizer = RegexTokenizer()
     return tokenizer | LowercaseFilter() | NgramFilter(minsize, maxsize, at=at)

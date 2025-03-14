@@ -25,10 +25,20 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
-from itertools import chain
+from __future__ import annotations
 
-from whoosh.analysis.acore import Composable
+from abc import ABC, abstractmethod
+from itertools import chain
+from typing import TYPE_CHECKING
+
 from whoosh.util.text import rcompile
+
+if TYPE_CHECKING:
+    import re
+    from collections.abc import Callable, Collection, Generator, Mapping
+
+    from whoosh.analysis.acore import Token
+    from whoosh.protocols import PLogger
 
 # Default list of stop words (words so common it's usually wasteful to index
 # them). This list is used by the StopFilter class, which allows you to supply
@@ -93,7 +103,7 @@ url_pattern = rcompile(
 # Filters
 
 
-class Filter(Composable):
+class Filter(ABC):
     """Base class for Filter objects. A Filter subclass must implement a
     filter() method that takes a single argument, which is an iterator of Token
     objects, and yield a series of Token objects in return.
@@ -102,24 +112,85 @@ class Filter(Composable):
     should set their ``is_morph`` attribute to True.
     """
 
-    def __eq__(self, other):
+    is_morph: bool = False
+
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.__dict__ == other.__dict__
         )
 
-    def __ne__(self, other):
-        return self != other
+    @abstractmethod
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]: ...
 
-    def __call__(self, tokens):
-        raise NotImplementedError
+    def __or__(self, other: Filter) -> CompositeFilter:
+        return CompositeFilter(self, other)
+
+    def has_morph(self) -> bool:
+        return self.is_morph
+
+    def clean(self):
+        # Intentionally left blank
+        pass
+
+
+class CompositeFilter(Filter):
+    # for composing filters before adding a tokenizer
+    filters: list[Filter]
+
+    def __init__(self, *filters: Filter):
+        self.filters = []
+
+        for filter in filters:
+            self.filters.append(filter)
+
+    def __repr__(self):
+        return "{}({})".format(
+            self.__class__.__name__,
+            ", ".join(repr(item) for item in self.filters),
+        )
+
+    def __call__(
+        self, value: Generator[Token], no_morph: bool = False
+    ) -> Generator[Token]:
+        gen = value
+        # Run filters
+        for item in self.filters:
+            if not (no_morph and hasattr(item, "is_morph") and item.is_morph):
+                gen = item(gen)
+        return gen
+
+    def __getitem__(self, item: int) -> Filter:
+        return self.filters.__getitem__(item)
+
+    def __len__(self):
+        return len(self.filters)
+
+    def __eq__(self, other: object):
+        return (
+            other is not None
+            and isinstance(other, type(self))
+            and self.filters == other.filters
+        )
+
+    def __or__(self, other: Filter) -> CompositeFilter:
+        if isinstance(other, type(self)):
+            return CompositeFilter(*self.filters, *other.filters)
+        return CompositeFilter(*self.filters, other)
+
+    def clean(self):
+        for item in self.filters:
+            item.clean()
+
+    def has_morph(self):
+        return any(item.is_morph for item in self.filters)
 
 
 class PassFilter(Filter):
     """An identity filter: passes the tokens through untouched."""
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         return tokens
 
 
@@ -128,7 +199,9 @@ class LoggingFilter(Filter):
     log entry.
     """
 
-    def __init__(self, logger=None):
+    logger: PLogger
+
+    def __init__(self, logger: PLogger | None = None):
         """
         :param target: the logger to use. If omitted, the "whoosh.analysis"
             logger is used.
@@ -140,7 +213,7 @@ class LoggingFilter(Filter):
             logger = logging.getLogger("whoosh.analysis")
         self.logger = logger
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         logger = self.logger
         for t in tokens:
             logger.debug(repr(t))
@@ -154,7 +227,7 @@ class MultiFilter(Filter):
 
     default_filter = PassFilter()
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Filter):
         """Use keyword arguments to associate mode attribute values with
         instantiated filters.
 
@@ -167,14 +240,14 @@ class MultiFilter(Filter):
         """
         self.filters = kwargs
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.filters == other.filters
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         # Only selects on the first token
         t = next(tokens)
         selected_filter = self.filters.get(t.mode, self.default_filter)
@@ -206,21 +279,23 @@ class TeeFilter(Filter):
     ["alfa", "alfa-bravo", "bravo", "bravo-charlie", "charlie"]
     """
 
-    def __init__(self, *filters):
+    filters: tuple[Filter, ...]
+
+    def __init__(self, *filters: Filter):
         if len(filters) < 2:
             raise ValueError("TeeFilter requires two or more filters")
         self.filters = filters
 
-    def __eq__(self, other):
-        return self.__class__ is other.__class__ and self.filters == other.fitlers
+    def __eq__(self, other: object):
+        return isinstance(other, type(self)) and self.filters == other.filters
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         from itertools import tee
 
         count = len(self.filters)
         # Tee the token iterator and wrap each teed iterator with the
         # corresponding filter
-        gens = [
+        gens: list[Generator[Token] | None] = [
             filter(t.copy() for t in gen)
             for filter, gen in zip(self.filters, tee(tokens, count))
         ]
@@ -244,7 +319,7 @@ class ReverseTextFilter(Filter):
     ["olleh", "ereht"]
     """
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         for t in tokens:
             t.text = t.text[::-1]
             yield t
@@ -259,7 +334,7 @@ class LowercaseFilter(Filter):
     ["this", "is", "a", "test"]
     """
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         for t in tokens:
             t.text = t.text.lower()
             yield t
@@ -268,7 +343,7 @@ class LowercaseFilter(Filter):
 class StripFilter(Filter):
     """Calls unicode.strip() on the token text."""
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         for t in tokens:
             t.text = t.text.strip()
             yield t
@@ -292,8 +367,18 @@ class StopFilter(Filter):
     has a stop word list available.
     """
 
+    stops: Collection[str]
+    min: int
+    max: int | None
+    renumber: bool
+
     def __init__(
-        self, stoplist=STOP_WORDS, minsize=2, maxsize=None, renumber=True, lang=None
+        self,
+        stoplist: Collection[str] = STOP_WORDS,
+        minsize: int = 2,
+        maxsize: int | None = None,
+        renumber: bool = True,
+        lang: str | None = None,
     ):
         """
         :param stoplist: A collection of words to remove from the stream.
@@ -309,7 +394,7 @@ class StopFilter(Filter):
             language
         """
 
-        stops = set()
+        stops: set[str] = set()
         if stoplist:
             stops.update(stoplist)
         if lang:
@@ -322,16 +407,16 @@ class StopFilter(Filter):
         self.max = maxsize
         self.renumber = renumber
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.stops == other.stops
             and self.min == other.min
             and self.renumber == other.renumber
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         stoplist = self.stops
         minsize = self.min
         maxsize = self.max
@@ -391,9 +476,9 @@ class CharsetFilter(Filter):
     http://www.sphinxsearch.com/docs/current.html#conf-charset-table.
     """
 
-    __inittypes__ = {"charmap": dict}
+    charmap: Mapping[int, str]
 
-    def __init__(self, charmap):
+    def __init__(self, charmap: Mapping[int, str]):
         """
         :param charmap: a dictionary mapping from integer character numbers to
             unicode characters, as required by the unicode.translate() method.
@@ -401,14 +486,14 @@ class CharsetFilter(Filter):
 
         self.charmap = charmap
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.charmap == other.charmap
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         assert hasattr(tokens, "__iter__")
         charmap = self.charmap
         for t in tokens:
@@ -435,7 +520,18 @@ class DelimitedAttributeFilter(Filter):
     data as part of the token!
     """
 
-    def __init__(self, delimiter="^", attribute="boost", default=1.0, type=float):
+    delim: str
+    attr: str
+    default: float
+    type_: type
+
+    def __init__(
+        self,
+        delimiter: str = "^",
+        attribute: str = "boost",
+        default: float = 1.0,
+        type_: type = float,
+    ):
         """
         :param delimiter: a string that, when present in a token's text,
             separates the actual text from the "data" payload.
@@ -451,22 +547,22 @@ class DelimitedAttributeFilter(Filter):
         self.delim = delimiter
         self.attr = attribute
         self.default = default
-        self.type = type
+        self.type_ = type_
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.delim == other.delim
             and self.attr == other.attr
             and self.default == other.default
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         delim = self.delim
         attr = self.attr
         default = self.default
-        type_ = self.type
+        type_ = self.type_
 
         for t in tokens:
             text = t.text
@@ -501,7 +597,14 @@ class SubstitutionFilter(Filter):
         ana = rt | sf
     """
 
-    def __init__(self, pattern, replacement):
+    pattern: re.Pattern[str]
+    replacement: str | Callable[[re.Match[str]], str]
+
+    def __init__(
+        self,
+        pattern: str | re.Pattern[str],
+        replacement: str | Callable[[re.Match[str]], str],
+    ):
         """
         :param pattern: a pattern string or compiled regular expression object
             describing the text to replace.
@@ -511,15 +614,15 @@ class SubstitutionFilter(Filter):
         self.pattern = rcompile(pattern)
         self.replacement = replacement
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.pattern == other.pattern
             and self.replacement == other.replacement
         )
 
-    def __call__(self, tokens):
+    def __call__(self, tokens: Generator[Token]) -> Generator[Token]:
         pattern = self.pattern
         replacement = self.replacement
 

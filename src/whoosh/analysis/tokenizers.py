@@ -25,8 +25,20 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
-from whoosh.analysis.acore import Composable, Token
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any
+
+from whoosh.analysis.acore import Token
+from whoosh.analysis.filters import CompositeFilter, Filter
 from whoosh.util.text import rcompile
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Mapping
+    from re import Pattern
+
+    from whoosh.analysis.analyzers import CompositeAnalyzer
 
 default_pattern = rcompile(r"[\w\*]+(\.?[\w\*]+)*")
 
@@ -34,11 +46,28 @@ default_pattern = rcompile(r"[\w\*]+(\.?[\w\*]+)*")
 # Tokenizers
 
 
-class Tokenizer(Composable):
+class Tokenizer(ABC):
     """Base class for Tokenizers."""
 
-    def __eq__(self, other):
-        return other and self.__class__ is other.__class__
+    def __eq__(self, other: object):
+        return other is not None and isinstance(other, type(self))
+
+    def __or__(self, other: Filter) -> CompositeAnalyzer:
+        from whoosh.analysis.analyzers import CompositeAnalyzer
+
+        if not isinstance(other, Filter):  # type: ignore
+            raise TypeError(f"{self!r} is not composable with {other!r}")
+
+        if isinstance(other, CompositeFilter):
+            return CompositeAnalyzer(self, *other.filters)
+        return CompositeAnalyzer(self, other)
+
+    @abstractmethod
+    def __call__(self, value: str) -> Generator[Token]: ...
+
+    def clean(self):
+        # Exists so that bare Tokenizers count as Analyzers
+        pass
 
 
 class IDTokenizer(Tokenizer):
@@ -52,16 +81,16 @@ class IDTokenizer(Tokenizer):
 
     def __call__(
         self,
-        value,
-        positions=False,
-        chars=False,
-        keeporiginal=False,
-        removestops=True,
-        start_pos=0,
-        start_char=0,
-        mode="",
-        **kwargs,
-    ):
+        value: str,
+        positions: bool = False,
+        chars: bool = False,
+        keeporiginal: bool = False,
+        removestops: bool = True,
+        start_pos: int = 0,
+        start_char: int = 0,
+        mode: str = "",
+        **kwargs: Any,
+    ) -> Generator[Token]:
         assert isinstance(value, str), f"{value!r} is not unicode"
         t = Token(positions, chars, removestops=removestops, mode=mode, **kwargs)
         t.text = value
@@ -85,7 +114,12 @@ class RegexTokenizer(Tokenizer):
     ["hi", "there", "3.141", "big", "time", "under_score"]
     """
 
-    def __init__(self, expression=default_pattern, gaps=False):
+    expression: Pattern[str]
+    gaps: bool
+
+    def __init__(
+        self, expression: str | Pattern[str] = default_pattern, gaps: bool = False
+    ):
         """
         :param expression: A regular expression object or string. Each match
             of the expression equals a token. Group 0 (the entire matched text)
@@ -98,25 +132,25 @@ class RegexTokenizer(Tokenizer):
         self.expression = rcompile(expression)
         self.gaps = gaps
 
-    def __eq__(self, other):
-        if self.__class__ is other.__class__:
-            if self.expression.pattern == other.expression.pattern:
-                return True
-        return False
+    def __eq__(self, other: object):
+        return (
+            isinstance(other, type(self))
+            and self.expression.pattern == other.expression.pattern
+        )
 
     def __call__(
         self,
-        value,
-        positions=False,
-        chars=False,
-        keeporiginal=False,
-        removestops=True,
-        start_pos=0,
-        start_char=0,
-        tokenize=True,
-        mode="",
-        **kwargs,
-    ):
+        value: str,
+        positions: bool = False,
+        chars: bool = False,
+        keeporiginal: bool = False,
+        removestops: bool = True,
+        start_pos: int = 0,
+        start_char: int = 0,
+        tokenize: bool = True,
+        mode: str = "",
+        **kwargs: Any,
+    ) -> Generator[Token]:
         """
         :param value: The unicode string to tokenize.
         :param positions: Whether to record token positions in the token.
@@ -221,35 +255,35 @@ class CharsetTokenizer(Tokenizer):
     http://www.sphinxsearch.com/docs/current.html#conf-charset-table.
     """
 
-    __inittype__ = {"charmap": str}
+    charmap: Mapping[int, str]
 
-    def __init__(self, charmap):
+    def __init__(self, charmap: Mapping[int, str]):
         """
         :param charmap: a mapping from integer character numbers to unicode
             characters, as used by the unicode.translate() method.
         """
         self.charmap = charmap
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return (
-            other
-            and self.__class__ is other.__class__
+            other is not None
+            and isinstance(other, type(self))
             and self.charmap == other.charmap
         )
 
     def __call__(
         self,
-        value,
-        positions=False,
-        chars=False,
-        keeporiginal=False,
-        removestops=True,
-        start_pos=0,
-        start_char=0,
-        tokenize=True,
-        mode="",
-        **kwargs,
-    ):
+        value: str,
+        positions: bool = False,
+        chars: bool = False,
+        keeporiginal: bool = False,
+        removestops: bool = True,
+        start_pos: int = 0,
+        start_char: int = 0,
+        tokenize: bool = True,
+        mode: str = "",
+        **kwargs: Any,
+    ) -> Generator[Token]:
         """
         :param value: The unicode string to tokenize.
         :param positions: Whether to record token positions in the token.
@@ -315,7 +349,7 @@ class CharsetTokenizer(Tokenizer):
                 yield t
 
 
-def SpaceSeparatedTokenizer():
+def SpaceSeparatedTokenizer() -> RegexTokenizer:
     """Returns a RegexTokenizer that splits tokens by whitespace.
 
     >>> sst = SpaceSeparatedTokenizer()
@@ -326,7 +360,7 @@ def SpaceSeparatedTokenizer():
     return RegexTokenizer(r"[^ \t\r\n]+")
 
 
-def CommaSeparatedTokenizer():
+def CommaSeparatedTokenizer() -> CompositeAnalyzer:
     """Splits tokens by commas.
 
     Note that the tokenizer calls unicode.strip() on each match of the regular
@@ -347,10 +381,12 @@ class PathTokenizer(Tokenizer):
     ``["/a", "/a/b", "/a/b/c"]``.
     """
 
-    def __init__(self, expression="[^/]+"):
+    def __init__(self, expression: str | Pattern[str] = "[^/]+"):
         self.expr = rcompile(expression)
 
-    def __call__(self, value, positions=False, start_pos=0, **kwargs):
+    def __call__(
+        self, value: str, positions: bool = False, start_pos: int = 0, **kwargs: Any
+    ) -> Generator[Token]:
         assert isinstance(value, str), f"{value!r} is not unicode"
         token = Token(positions, **kwargs)
         pos = start_pos

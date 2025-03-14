@@ -4,6 +4,8 @@
 # 2007 who claims no rights to this work.
 # http://atomboy.isa-geek.com:8080/plone/Members/acoil/programing/double-metaphone
 
+from __future__ import annotations
+
 import re
 
 vowels = frozenset("AEIOUY")
@@ -11,7 +13,9 @@ slavo_germ_exp = re.compile("W|K|CZ|WITZ")
 silent_starts = re.compile("GN|KN|PN|WR|PS")
 
 
-def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
+def double_metaphone(  # noqa: C901, PLR0912, PLR0915
+    text: str,
+) -> tuple[str | None, str | None]:
     """
     This function is too complex (125) -- ruff rule C901
     This function has too many branches (181) -- ruff rule PLR0912
@@ -25,10 +29,16 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
     text = "--" + text + "     "
     first = pos = 2
     last = first + length - 1
+    primary: str
+    secondary: str
     primary = secondary = ""
 
     if silent_starts.match(text, pos):
         pos += 1
+
+    next: tuple[str | None, int] | tuple[str | None, str | None, int] | tuple[()] = ()
+    # NOTE: (de-odex) Errors on `next` when setting strings and position int separately
+    # Tuple size mismatch; expected <number> but received indeterminate
 
     while pos < length + 2:
         ch = text[pos]
@@ -247,11 +257,11 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
                 if (pos == first and text[pos + 4] == " ") or text[
                     first : first + 4
                 ] == "SAN ":
-                    next = ("H",)
+                    next_ = ("H",)
                 else:
-                    next = ("J", "H")
+                    next_ = ("J", "H")
             elif pos == first and text[pos : pos + 4] != "JOSE":
-                next = ("J", "A")  # Yankelovich/Jankelowicz
+                next_ = ("J", "A")  # Yankelovich/Jankelowicz
             else:
                 # spanish pron. of e.g. 'bajador'
                 if (
@@ -259,10 +269,10 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
                     and not slavo_germanic
                     and text[pos + 1] in ["A", "O"]
                 ):
-                    next = ("J", "H")
+                    next_ = ("J", "H")
                 else:
                     if pos == last:
-                        next = ("J", " ")
+                        next_ = ("J", " ")
                     else:
                         if text[pos + 1] not in [
                             "L",
@@ -274,13 +284,13 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
                             "B",
                             "Z",
                         ] and text[pos - 1] not in ["S", "K", "L"]:
-                            next = ("J",)
+                            next_ = ("J",)
                         else:
-                            next = (None,)
+                            next_ = (None,)
             if text[pos + 1] == "J":
-                next = next + (2,)
+                next = next_ + (2,)  # type: ignore
             else:
-                next = next + (1,)
+                next = next_ + (1,)  # type: ignore
         elif ch == "K":
             if text[pos + 1] == "K":
                 next = ("K", 2)
@@ -343,13 +353,13 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
                 and text[pos - 2 : pos] == "IE"
                 and text[pos - 4 : pos - 2] not in ["ME", "MA"]
             ):
-                next = ("", "R")
+                next_ = ("", "R")
             else:
-                next = ("R",)
+                next_ = ("R",)
             if text[pos + 1] == "R":
-                next = next + (2,)
+                next = next_ + (2,)  # type: ignore
             else:
-                next = next + (1,)
+                next = next_ + (1,)  # type: ignore
         elif ch == "S":
             # special cases 'island', 'isle', 'carlisle', 'carlysle'
             if text[pos - 1 : pos + 2] in ["ISL", "YSL"]:
@@ -374,11 +384,11 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
             elif (pos == first and text[pos + 1] in ["M", "N", "L", "W"]) or text[
                 pos + 1
             ] == "Z":
-                next = ("S", "X")
+                next_ = ("S", "X")
                 if text[pos + 1] == "Z":
-                    next = next + (2,)
+                    next = next_ + (2,)
                 else:
-                    next = next + (1,)
+                    next = next_ + (1,)
             elif text[pos : pos + 2] == "SC":
                 # Schlesinger's rule
                 if text[pos + 2] == "H":
@@ -406,11 +416,11 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
             elif pos == last and text[pos - 2 : pos] in ["AI", "OI"]:
                 next = ("", "S", 1)
             else:
-                next = ("S",)
+                next_ = ("S",)
                 if text[pos + 1] in ["S", "Z"]:
-                    next = next + (2,)
+                    next = next_ + (2,)
                 else:
-                    next = next + (1,)
+                    next = next_ + (1,)
         elif ch == "T":
             if text[pos : pos + 4] == "TION":
                 next = ("X", 3)
@@ -461,7 +471,7 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
                 next = (None, 1)
         elif ch == "X":
             # french e.g. breaux
-            next = (None,)
+            next_ = (None,)
             if not (
                 pos == last
                 and (
@@ -469,30 +479,30 @@ def double_metaphone(text):  # noqa: C901, PLR0912, PLR0915
                     or text[pos - 2 : pos] in ["AU", "OU"]
                 )
             ):
-                next = ("KS",)
+                next_ = ("KS",)
             if text[pos + 1] in ["C", "X"]:
-                next = next + (2,)
+                next = next_ + (2,)  # type: ignore
             else:
-                next = next + (1,)
+                next = next_ + (1,)  # type: ignore
         elif ch == "Z":
             # chinese pinyin e.g. 'zhao'
             if text[pos + 1] == "H":
-                next = ("J",)
+                next_ = ("J",)
             elif text[pos + 1 : pos + 3] in ["ZO", "ZI", "ZA"] or (
                 slavo_germanic and pos > first and text[pos - 1] != "T"
             ):
-                next = ("S", "TS")
+                next_ = ("S", "TS")
             else:
-                next = ("S",)
+                next_ = ("S",)
             if text[pos + 1] == "Z":
-                next = next + (2,)
+                next = next_ + (2,)  # type: ignore
             else:
-                next = next + (1,)
+                next = next_ + (1,)  # type: ignore
         else:
             next = (None, 1)
 
         if len(next) == 2:
-            if next[0]:
+            if next[0] is not None:
                 primary += next[0]
                 secondary += next[0]
             pos += next[1]

@@ -25,10 +25,14 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
+from __future__ import annotations
+
 import codecs
 import re
-from collections.abc import Generator, Sequence
-from typing import TypeVar, Union
+from typing import TYPE_CHECKING, TypeVar
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Sequence
 
 # Note: these functions return a tuple of (text, length), so when you call
 # them, you have to add [0] on the end, e.g. str = utf8encode(unicode)[0]
@@ -101,14 +105,14 @@ def prefix_decode_all(ls: Sequence[str]):
 _nkre = re.compile(r"\D+|\d+", re.UNICODE)
 
 
-def _nkconv(i: str) -> Union[str, int]:
+def _nkconv(i: str) -> str | int:
     try:
         return int(i)
     except ValueError:
         return i.lower()
 
 
-def natural_key(s: str) -> tuple[Union[str, int], ...]:
+def natural_key(s: str) -> tuple[str | int, ...]:
     """Converts string ``s`` into a tuple that will sort "naturally" (i.e.,
     ``name5`` will come before ``name10`` and ``1`` will come before ``A``).
     This function is designed to be used as the ``key`` argument to sorting
@@ -128,7 +132,7 @@ def natural_key(s: str) -> tuple[Union[str, int], ...]:
 
 
 def rcompile(
-    pattern: Union[str, re.Pattern[str]], flags: int = 0, verbose: bool = False
+    pattern: str | re.Pattern[str], flags: int = 0, verbose: bool = False
 ) -> re.Pattern[str]:
     """A wrapper for re.compile that checks whether "pattern" is a regex object
     or a string to be compiled, and automatically adds the re.UNICODE flag.

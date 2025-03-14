@@ -1,1 +1,2 @@
+cached-property==2.0.1
 .

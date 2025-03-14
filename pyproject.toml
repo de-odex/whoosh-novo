@@ -162,6 +162,8 @@ env_list = ["py39", "py310", "py311", "py312", "py313"]
 
 [tool.tox.env_run_base]
 runner = "uv-venv-lock-runner"
+
+[tool.tox.env.test]
 dependency_groups = ["test"]
 commands = [["pytest", { replace = "posargs", default = ["tests"], extend = true }]]
 

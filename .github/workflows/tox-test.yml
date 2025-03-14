@@ -8,7 +8,7 @@ on:
   pull_request:
 
 concurrency:
-  group: tox-${{ github.ref }}
+  group: tox-test-${{ github.ref }}
   cancel-in-progress: true
 
 # TODO: replace the rest of test.yml

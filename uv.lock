@@ -478,7 +478,7 @@ wheels = [
 ]
 
 [[package]]
-name = "whoosh-reloaded"
+name = "whoosh-novo"
 source = { editable = "." }
 dependencies = [
     { name = "cached-property" },

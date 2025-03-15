@@ -1,16 +1,18 @@
 [project]
-name = "Whoosh-Reloaded"
+name = "Whoosh-Novo"
 dynamic = ["version"]
 description = "Fast, pure-Python full text indexing, search, and spell checking library."
 readme = "README.md"
 license = { text = "Two-clause BSD license" }
 keywords = ["index", "search", "text", "spell"]
-urls = { Homepage = "https://github.com/Sygil-Dev/whoosh-reloaded" }
+urls = { Homepage = "https://github.com/de-odex/whoosh-novo" }
 authors = [
   { name = "Matt Chaput", email = "matt@whoosh.ca" },
 ]
 maintainers = [
-  { name = "Sygil-Dev" },
+  # not sure if i'm meant to leave this in when i'm possibly syncing with their branch
+  # once they start contributing again
+  # { name = "Sygil-Dev" },
   { name = "de-odex" },
 ]
 classifiers = [

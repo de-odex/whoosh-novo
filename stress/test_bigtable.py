@@ -1,6 +1,5 @@
 from random import randint, shuffle
 
-from nose.tools import assert_equal  # type: ignore @UnresolvedImport
 from whoosh.filedb.filetables import HashReader, HashWriter
 from whoosh.util.testing import TempStorage
 
@@ -22,10 +21,10 @@ def test_bigtable():
         keys = list(samp.keys())
         shuffle(keys)
         for key in keys:
-            assert_equal(samp[key], fhr[key])
+            assert samp[key] == fhr[key]
 
         set1 = set(samp.items())
         set2 = set(fhr.items())
-        assert_equal(set1, set2)
+        assert set1 == set2
 
         fhr.close()

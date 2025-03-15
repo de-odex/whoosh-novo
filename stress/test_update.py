@@ -1,6 +1,5 @@
 import random
 
-from nose.tools import assert_equal
 from whoosh import fields, query
 from whoosh.util.testing import TempIndex
 
@@ -16,4 +15,4 @@ def test_many_updates():
 
         with ix.searcher() as s:
             result = [d["key"] for d in s.search(query.Every())]
-            assert_equal(len(result), len(set(result)))
+            assert len(result) == len(set(result))

@@ -31,6 +31,6 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/ikamensh/flynt/
-    rev: "1.0.1"
+    rev: "8334ff9fdd81ea3ba3269ec38a6073d13c8069a5" # 1.0.2, was untagged
     hooks:
       - id: flynt

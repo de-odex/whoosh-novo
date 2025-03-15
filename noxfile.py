@@ -42,4 +42,11 @@ def cov(session: Session):
     else:
         test_files = ["tests"]
 
-    session.run("pytest", "--cov-branch", "--cov-report=xml", *test_files)
+    session.run(
+        "pytest",
+        "--cov=.",
+        "--cov-branch",
+        "--cov-report=xml",
+        "--cov-report=html",
+        *test_files,
+    )

@@ -1,5 +1,5 @@
 # referenced from https://github.com/tox-dev/tox-gh
-name: "Tox: Test"
+name: "Nox: Coverage"
 on:
   workflow_dispatch:
   push:
@@ -8,12 +8,12 @@ on:
   pull_request:
 
 concurrency:
-  group: tox-test-${{ github.ref }}
+  group: nox-cov-${{ github.ref }}
   cancel-in-progress: true
 
 # TODO: replace the rest of test.yml
 jobs:
-  tox-test:
+  nox-cov:
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -29,6 +29,9 @@ jobs:
           - macos-latest
           - windows-latest
     runs-on: ${{ matrix.os }}
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,18 +40,25 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          cache-dependency-glob: "pyproject.toml"
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Add .local/bin to Windows PATH
         if: runner.os == 'Windows'
         shell: bash
         run: echo "$USERPROFILE/.local/bin" >> $GITHUB_PATH
-      - name: Install tox
-        run: uv tool install --python-preference only-managed --python 3.13 tox --with tox-uv # --with tox-gh
+      - name: Install nox
+        run: uv tool install --python-preference only-managed --python 3.13 "nox[uv]"
       - name: Install Python
         if: matrix.env != '3.13'
         run: uv python install --python-preference only-managed ${{ matrix.env }}
       - name: Run test suite
-        run: tox run -e py-test
+        run: nox --session cov
         env:
-          TOX_GH_MAJOR_MINOR: ${{ matrix.env }}
+          NOXPYTHON: ${{ matrix.env }}
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          handle_no_reports_found: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true

@@ -45,6 +45,7 @@ cov = [
 ]
 dev = [
   { include-group = "test" },
+  "nox~=2025.2.9",
   "ruff~=0.11.0",
   "flynt~=1.0.2",
   "pre-commit~=4.1.0",
@@ -154,21 +155,3 @@ max-args = 22  # Default is 5
 max-branches = 79  # Default is 12
 max-returns = 16  # Default is 6
 max-statements = 256  # Default is 50
-
-
-[tool.tox]
-requires = ["tox>=4"]
-env_list = ["py39", "py310", "py311", "py312", "py313"]
-
-[tool.tox.env_run_base]
-runner = "uv-venv-lock-runner"
-
-[tool.tox.env.test]
-dependency_groups = ["test"]
-commands = [["pytest", { replace = "posargs", default = ["tests"], extend = true }]]
-
-[tool.tox.env.coverage]
-dependency_groups = ["test", "cov"]
-commands = [
-  ["pytest", "--cov-branch", "--cov-report=xml", { replace = "posargs", default = ["tests"], extend = true }],
-]

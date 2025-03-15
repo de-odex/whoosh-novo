@@ -25,9 +25,7 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
-"""This module contains classes and functions related to searching the index.
-"""
-
+"""This module contains classes and functions related to searching the index."""
 
 import copy
 import weakref

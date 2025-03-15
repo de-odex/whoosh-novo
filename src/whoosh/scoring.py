@@ -29,7 +29,6 @@
 This module contains classes for scoring (and sorting) search results.
 """
 
-
 from math import log, pi
 
 # Base classes

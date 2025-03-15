@@ -26,7 +26,7 @@ class DanishStemmer(_ScandinavianStemmer):
     """
 
     # The language's vowels and other important characters are defined.
-    __vowels = "aeiouy\xE6\xE5\xF8"
+    __vowels = "aeiouy\xe6\xe5\xf8"
     __consonants = "bcdfghjklmnpqrstvwxz"
     __double_consonants = (
         "bb",
@@ -50,7 +50,7 @@ class DanishStemmer(_ScandinavianStemmer):
         "xx",
         "zz",
     )
-    __s_ending = "abcdfghjklmnoprtvyz\xE5"
+    __s_ending = "abcdfghjklmnoprtvyz\xe5"
 
     # The different suffixes, divided into the algorithm's steps
     # and organized by length, are listed in tuples.
@@ -89,7 +89,7 @@ class DanishStemmer(_ScandinavianStemmer):
         "s",
     )
     __step2_suffixes = ("gd", "dt", "gt", "kt")
-    __step3_suffixes = ("elig", "l\xF8st", "lig", "els", "ig")
+    __step3_suffixes = ("elig", "l\xf8st", "lig", "els", "ig")
 
     def stem(self, word):
         """
@@ -138,7 +138,7 @@ class DanishStemmer(_ScandinavianStemmer):
 
         for suffix in self.__step3_suffixes:
             if r1.endswith(suffix):
-                if suffix == "l\xF8st":
+                if suffix == "l\xf8st":
                     word = word[:-1]
                     r1 = r1[:-1]
                 else:

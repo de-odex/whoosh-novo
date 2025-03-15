@@ -2,7 +2,6 @@ from .bases import _StandardStemmer
 
 
 class PortugueseStemmer(_StandardStemmer):
-
     """
     The Portuguese Snowball stemmer.
 
@@ -20,7 +19,7 @@ class PortugueseStemmer(_StandardStemmer):
 
     """
 
-    __vowels = "aeiou\xE1\xE9\xED\xF3\xFA\xE2\xEA\xF4"
+    __vowels = "aeiou\xe1\xe9\xed\xf3\xfa\xe2\xea\xf4"
     __step1_suffixes = (
         "amentos",
         "imentos",
@@ -29,28 +28,28 @@ class PortugueseStemmer(_StandardStemmer):
         "imento",
         "adoras",
         "adores",
-        "a\xE7o~es",
-        "log\xEDas",
-        "\xEAncias",
+        "a\xe7o~es",
+        "log\xedas",
+        "\xeancias",
         "amente",
         "idades",
         "ismos",
         "istas",
         "adora",
-        "a\xE7a~o",
+        "a\xe7a~o",
         "antes",
-        "\xE2ncia",
-        "log\xEDa",
-        "uci\xF3n",
-        "\xEAncia",
+        "\xe2ncia",
+        "log\xeda",
+        "uci\xf3n",
+        "\xeancia",
         "mente",
         "idade",
         "ezas",
         "icos",
         "icas",
         "ismo",
-        "\xE1vel",
-        "\xEDvel",
+        "\xe1vel",
+        "\xedvel",
         "ista",
         "osos",
         "osas",
@@ -69,22 +68,22 @@ class PortugueseStemmer(_StandardStemmer):
         "ira",
     )
     __step2_suffixes = (
-        "ar\xEDamos",
-        "er\xEDamos",
-        "ir\xEDamos",
-        "\xE1ssemos",
-        "\xEAssemos",
-        "\xEDssemos",
-        "ar\xEDeis",
-        "er\xEDeis",
-        "ir\xEDeis",
-        "\xE1sseis",
-        "\xE9sseis",
-        "\xEDsseis",
-        "\xE1ramos",
-        "\xE9ramos",
-        "\xEDramos",
-        "\xE1vamos",
+        "ar\xedamos",
+        "er\xedamos",
+        "ir\xedamos",
+        "\xe1ssemos",
+        "\xeassemos",
+        "\xedssemos",
+        "ar\xedeis",
+        "er\xedeis",
+        "ir\xedeis",
+        "\xe1sseis",
+        "\xe9sseis",
+        "\xedsseis",
+        "\xe1ramos",
+        "\xe9ramos",
+        "\xedramos",
+        "\xe1vamos",
         "aremos",
         "eremos",
         "iremos",
@@ -109,14 +108,14 @@ class PortugueseStemmer(_StandardStemmer):
         "astes",
         "estes",
         "istes",
-        "\xE1reis",
+        "\xe1reis",
         "areis",
-        "\xE9reis",
+        "\xe9reis",
         "ereis",
-        "\xEDreis",
+        "\xedreis",
         "ireis",
-        "\xE1veis",
-        "\xEDamos",
+        "\xe1veis",
+        "\xedamos",
         "armos",
         "ermos",
         "irmos",
@@ -144,30 +143,30 @@ class PortugueseStemmer(_StandardStemmer):
         "indo",
         "adas",
         "idas",
-        "ar\xE1s",
+        "ar\xe1s",
         "aras",
-        "er\xE1s",
+        "er\xe1s",
         "eras",
-        "ir\xE1s",
+        "ir\xe1s",
         "avas",
         "ares",
         "eres",
         "ires",
-        "\xEDeis",
+        "\xedeis",
         "ados",
         "idos",
-        "\xE1mos",
+        "\xe1mos",
         "amos",
         "emos",
         "imos",
         "iras",
         "ada",
         "ida",
-        "ar\xE1",
+        "ar\xe1",
         "ara",
-        "er\xE1",
+        "er\xe1",
         "era",
-        "ir\xE1",
+        "ir\xe1",
         "ava",
         "iam",
         "ado",
@@ -190,7 +189,7 @@ class PortugueseStemmer(_StandardStemmer):
         "iu",
         "ou",
     )
-    __step4_suffixes = ("os", "a", "i", "o", "\xE1", "\xED", "\xF3")
+    __step4_suffixes = ("os", "a", "i", "o", "\xe1", "\xed", "\xf3")
 
     def stem(self, word):
         """
@@ -207,7 +206,7 @@ class PortugueseStemmer(_StandardStemmer):
         step1_success = False
         step2_success = False
 
-        word = word.replace("\xE3", "a~").replace("\xF5", "o~")
+        word = word.replace("\xe3", "a~").replace("\xf5", "o~")
 
         r1, r2 = self._r1r2_standard(word, self.__vowels)
         rv = self._rv_standard(word, self.__vowels)
@@ -248,15 +247,15 @@ class PortugueseStemmer(_StandardStemmer):
                 elif r2.endswith(suffix):
                     step1_success = True
 
-                    if suffix in ("log\xEDa", "log\xEDas"):
+                    if suffix in ("log\xeda", "log\xedas"):
                         word = word[:-2]
                         rv = rv[:-2]
 
-                    elif suffix in ("uci\xF3n", "uciones"):
+                    elif suffix in ("uci\xf3n", "uciones"):
                         word = "".join((word[: -len(suffix)], "u"))
                         rv = "".join((rv[: -len(suffix)], "u"))
 
-                    elif suffix in ("\xEAncia", "\xEAncias"):
+                    elif suffix in ("\xeancia", "\xeancias"):
                         word = "".join((word[: -len(suffix)], "ente"))
                         rv = "".join((rv[: -len(suffix)], "ente"))
 
@@ -265,7 +264,7 @@ class PortugueseStemmer(_StandardStemmer):
                         r2 = r2[:-5]
                         rv = rv[:-5]
 
-                        if r2.endswith(("ante", "avel", "\xEDvel")):
+                        if r2.endswith(("ante", "avel", "\xedvel")):
                             word = word[:-4]
                             rv = rv[:-4]
 
@@ -320,7 +319,7 @@ class PortugueseStemmer(_StandardStemmer):
                     break
 
         # STEP 5
-        if rv.endswith(("e", "\xE9", "\xEA")):
+        if rv.endswith(("e", "\xe9", "\xea")):
             word = word[:-1]
             rv = rv[:-1]
 
@@ -329,8 +328,8 @@ class PortugueseStemmer(_StandardStemmer):
             ):
                 word = word[:-1]
 
-        elif word.endswith("\xE7"):
+        elif word.endswith("\xe7"):
             word = "".join((word[:-1], "c"))
 
-        word = word.replace("a~", "\xE3").replace("o~", "\xF5")
+        word = word.replace("a~", "\xe3").replace("o~", "\xf5")
         return word

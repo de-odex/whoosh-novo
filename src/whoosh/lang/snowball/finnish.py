@@ -28,9 +28,9 @@ class FinnishStemmer(_StandardStemmer):
            http://snowball.tartarus.org/algorithms/finnish/stemmer.html
     """
 
-    __vowels = "aeiouy\xE4\xF6"
-    __restricted_vowels = "aeiou\xE4\xF6"
-    __long_vowels = ("aa", "ee", "ii", "oo", "uu", "\xE4\xE4", "\xF6\xF6")
+    __vowels = "aeiouy\xe4\xf6"
+    __restricted_vowels = "aeiou\xe4\xf6"
+    __long_vowels = ("aa", "ee", "ii", "oo", "uu", "\xe4\xe4", "\xf6\xf6")
     __consonants = "bcdfghjklmnpqrstvwxz"
     __double_consonants = (
         "bb",
@@ -56,25 +56,25 @@ class FinnishStemmer(_StandardStemmer):
     )
     __step1_suffixes = (
         "kaan",
-        "k\xE4\xE4n",
+        "k\xe4\xe4n",
         "sti",
         "kin",
         "han",
-        "h\xE4n",
+        "h\xe4n",
         "ko",
-        "k\xF6",
+        "k\xf6",
         "pa",
-        "p\xE4",
+        "p\xe4",
     )
     __step2_suffixes = (
         "nsa",
-        "ns\xE4",
+        "ns\xe4",
         "mme",
         "nne",
         "si",
         "ni",
         "an",
-        "\xE4n",
+        "\xe4n",
         "en",
     )
     __step3_suffixes = (
@@ -85,45 +85,45 @@ class FinnishStemmer(_StandardStemmer):
         "hen",
         "hin",
         "hon",
-        "h\xE4n",
-        "h\xF6n",
+        "h\xe4n",
+        "h\xf6n",
         "den",
         "tta",
-        "tt\xE4",
+        "tt\xe4",
         "ssa",
-        "ss\xE4",
+        "ss\xe4",
         "sta",
-        "st\xE4",
+        "st\xe4",
         "lla",
-        "ll\xE4",
+        "ll\xe4",
         "lta",
-        "lt\xE4",
+        "lt\xe4",
         "lle",
         "ksi",
         "ine",
         "ta",
-        "t\xE4",
+        "t\xe4",
         "na",
-        "n\xE4",
+        "n\xe4",
         "a",
-        "\xE4",
+        "\xe4",
         "n",
     )
     __step4_suffixes = (
         "impi",
         "impa",
-        "imp\xE4",
+        "imp\xe4",
         "immi",
         "imma",
-        "imm\xE4",
+        "imm\xe4",
         "mpi",
         "mpa",
-        "mp\xE4",
+        "mp\xe4",
         "mmi",
         "mma",
-        "mm\xE4",
+        "mm\xe4",
         "eja",
-        "ej\xE4",
+        "ej\xe4",
     )
 
     def stem(self, word):  # noqa: C901
@@ -155,7 +155,7 @@ class FinnishStemmer(_StandardStemmer):
                         r1 = r1[:-3]
                         r2 = r2[:-3]
                 else:
-                    if word[-len(suffix) - 1] in "ntaeiouy\xE4\xF6":
+                    if word[-len(suffix) - 1] in "ntaeiouy\xe4\xf6":
                         word = word[: -len(suffix)]
                         r1 = r1[: -len(suffix)]
                         r2 = r2[: -len(suffix)]
@@ -194,12 +194,12 @@ class FinnishStemmer(_StandardStemmer):
                         r1 = r1[:-2]
                         r2 = r2[:-2]
 
-                elif suffix == "\xE4n":
-                    if word[-4:-2] in ("t\xE4", "n\xE4") or word[-5:-2] in (
-                        "ss\xE4",
-                        "st\xE4",
-                        "ll\xE4",
-                        "lt\xE4",
+                elif suffix == "\xe4n":
+                    if word[-4:-2] in ("t\xe4", "n\xe4") or word[-5:-2] in (
+                        "ss\xe4",
+                        "st\xe4",
+                        "ll\xe4",
+                        "lt\xe4",
                     ):
                         word = word[:-2]
                         r1 = r1[:-2]
@@ -219,14 +219,14 @@ class FinnishStemmer(_StandardStemmer):
         # STEP 3: Cases
         for suffix in self.__step3_suffixes:
             if r1.endswith(suffix):
-                if suffix in ("han", "hen", "hin", "hon", "h\xE4n", "h\xF6n"):
+                if suffix in ("han", "hen", "hin", "hon", "h\xe4n", "h\xf6n"):
                     if (
                         (suffix == "han" and word[-4] == "a")
                         or (suffix == "hen" and word[-4] == "e")
                         or (suffix == "hin" and word[-4] == "i")
                         or (suffix == "hon" and word[-4] == "o")
-                        or (suffix == "h\xE4n" and word[-4] == "\xE4")
-                        or (suffix == "h\xF6n" and word[-4] == "\xF6")
+                        or (suffix == "h\xe4n" and word[-4] == "\xe4")
+                        or (suffix == "h\xf6n" and word[-4] == "\xf6")
                     ):
                         word = word[:-3]
                         r1 = r1[:-3]
@@ -254,14 +254,14 @@ class FinnishStemmer(_StandardStemmer):
                     else:
                         continue
 
-                elif suffix in ("a", "\xE4"):
+                elif suffix in ("a", "\xe4"):
                     if word[-2] in self.__vowels and word[-3] in self.__consonants:
                         word = word[:-1]
                         r1 = r1[:-1]
                         r2 = r2[:-1]
                         step3_success = True
 
-                elif suffix in ("tta", "tt\xE4"):
+                elif suffix in ("tta", "tt\xe4"):
                     if word[-4] == "e":
                         word = word[:-3]
                         r1 = r1[:-3]
@@ -288,7 +288,7 @@ class FinnishStemmer(_StandardStemmer):
         # STEP 4: Other endings
         for suffix in self.__step4_suffixes:
             if r2.endswith(suffix):
-                if suffix in ("mpi", "mpa", "mp\xE4", "mmi", "mma", "mm\xE4"):
+                if suffix in ("mpi", "mpa", "mp\xe4", "mmi", "mma", "mm\xe4"):
                     if word[-5:-3] != "po":
                         word = word[:-3]
                         r1 = r1[:-3]
@@ -325,7 +325,7 @@ class FinnishStemmer(_StandardStemmer):
             word = word[:-1]
             r1 = r1[:-1]
 
-        if len(r1) >= 2 and r1[-2] in self.__consonants and r1[-1] in "a\xE4ei":
+        if len(r1) >= 2 and r1[-2] in self.__consonants and r1[-1] in "a\xe4ei":
             word = word[:-1]
             r1 = r1[:-1]
 

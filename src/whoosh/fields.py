@@ -26,7 +26,7 @@
 # policies, either expressed or implied, of Matt Chaput.
 
 """
- Contains functions and classes related to fields.
+Contains functions and classes related to fields.
 """
 
 import datetime
@@ -132,13 +132,7 @@ class FieldType:
             self.vector = None
 
     def __repr__(self):
-        return "{}(format={!r}, scorable={}, stored={}, unique={})".format(
-            self.__class__.__name__,
-            self.format,
-            self.scorable,
-            self.stored,
-            self.unique,
-        )
+        return f"{self.__class__.__name__}(format={self.format!r}, scorable={self.scorable}, stored={self.stored}, unique={self.unique})"
 
     def __eq__(self, other):
         return all(

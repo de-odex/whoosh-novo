@@ -2,7 +2,6 @@ from .bases import _ScandinavianStemmer
 
 
 class SwedishStemmer(_ScandinavianStemmer):
-
     """
     The Swedish Snowball stemmer.
 
@@ -21,7 +20,7 @@ class SwedishStemmer(_ScandinavianStemmer):
            http://snowball.tartarus.org/algorithms/swedish/stemmer.html
     """
 
-    __vowels = "aeiouy\xE4\xE5\xF6"
+    __vowels = "aeiouy\xe4\xe5\xf6"
     __s_ending = "bcdfghjklmnoprtvy"
     __step1_suffixes = (
         "heterna",
@@ -63,7 +62,7 @@ class SwedishStemmer(_ScandinavianStemmer):
         "s",
     )
     __step2_suffixes = ("dd", "gd", "nn", "dt", "gt", "kt", "tt")
-    __step3_suffixes = ("fullt", "l\xF6st", "els", "lig", "ig")
+    __step3_suffixes = ("fullt", "l\xf6st", "els", "lig", "ig")
 
     def stem(self, word):
         """
@@ -103,7 +102,7 @@ class SwedishStemmer(_ScandinavianStemmer):
             if r1.endswith(suffix):
                 if suffix in ("els", "lig", "ig"):
                     word = word[: -len(suffix)]
-                elif suffix in ("fullt", "l\xF6st"):
+                elif suffix in ("fullt", "l\xf6st"):
                     word = word[:-1]
                 break
 

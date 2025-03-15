@@ -16,7 +16,7 @@ class DutchStemmer(_StandardStemmer):
            http://snowball.tartarus.org/algorithms/dutch/stemmer.html
     """
 
-    __vowels = "aeiouy\xE8"
+    __vowels = "aeiouy\xe8"
     __step1_suffixes = ("heden", "ene", "en", "se", "s")
     __step3b_suffixes = ("baar", "lijk", "bar", "end", "ing", "ig")
 
@@ -36,16 +36,16 @@ class DutchStemmer(_StandardStemmer):
 
         # Vowel accents are removed.
         word = (
-            word.replace("\xE4", "a")
-            .replace("\xE1", "a")
-            .replace("\xEB", "e")
-            .replace("\xE9", "e")
-            .replace("\xED", "i")
-            .replace("\xEF", "i")
-            .replace("\xF6", "o")
-            .replace("\xF3", "o")
-            .replace("\xFC", "u")
-            .replace("\xFA", "u")
+            word.replace("\xe4", "a")
+            .replace("\xe1", "a")
+            .replace("\xeb", "e")
+            .replace("\xe9", "e")
+            .replace("\xed", "i")
+            .replace("\xef", "i")
+            .replace("\xf6", "o")
+            .replace("\xf3", "o")
+            .replace("\xfc", "u")
+            .replace("\xfa", "u")
         )
 
         # An initial 'y', a 'y' after a vowel,

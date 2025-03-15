@@ -217,9 +217,9 @@ class StructFile:
         if i <= 253:
             self.write(chr(i))
         elif i <= 65535:
-            self.write("\xFE" + pack_ushort(i))
+            self.write("\xfe" + pack_ushort(i))
         else:
-            self.write("\xFF" + pack_uint(i))
+            self.write("\xff" + pack_uint(i))
 
     def read_tagint(self):
         """Reads a sometimes-compressed unsigned integer from the wrapped file.

@@ -2,7 +2,6 @@ from .bases import _StandardStemmer
 
 
 class RomanianStemmer(_StandardStemmer):
-
     """
     The Romanian Snowball stemmer.
 
@@ -22,7 +21,7 @@ class RomanianStemmer(_StandardStemmer):
 
     """
 
-    __vowels = "aeiou\u0103\xE2\xEE"
+    __vowels = "aeiou\u0103\xe2\xee"
     __step0_suffixes = (
         "iilor",
         "ului",
@@ -120,7 +119,7 @@ class RomanianStemmer(_StandardStemmer):
         "iste",
         "isti",
         "ist\u0103",
-        "i\u015Fti",
+        "i\u015fti",
         "ata",
         "at\u0103",
         "ati",
@@ -138,7 +137,7 @@ class RomanianStemmer(_StandardStemmer):
         "ici",
         "ic\u0103",
         "osi",
-        "o\u015Fi",
+        "o\u015fi",
         "ant",
         "iva",
         "ive",
@@ -157,57 +156,57 @@ class RomanianStemmer(_StandardStemmer):
         "seser\u0103\u0163i",
         "aser\u0103\u0163i",
         "iser\u0103\u0163i",
-        "\xE2ser\u0103\u0163i",
+        "\xe2ser\u0103\u0163i",
         "user\u0103\u0163i",
         "seser\u0103m",
         "aser\u0103m",
         "iser\u0103m",
-        "\xE2ser\u0103m",
+        "\xe2ser\u0103m",
         "user\u0103m",
         "ser\u0103\u0163i",
-        "sese\u015Fi",
+        "sese\u015fi",
         "seser\u0103",
         "easc\u0103",
         "ar\u0103\u0163i",
         "ur\u0103\u0163i",
         "ir\u0103\u0163i",
-        "\xE2r\u0103\u0163i",
-        "ase\u015Fi",
+        "\xe2r\u0103\u0163i",
+        "ase\u015fi",
         "aser\u0103",
-        "ise\u015Fi",
+        "ise\u015fi",
         "iser\u0103",
-        "\xe2se\u015Fi",
-        "\xE2ser\u0103",
-        "use\u015Fi",
+        "\xe2se\u015fi",
+        "\xe2ser\u0103",
+        "use\u015fi",
         "user\u0103",
         "ser\u0103m",
         "sesem",
         "indu",
-        "\xE2ndu",
+        "\xe2ndu",
         "eaz\u0103",
-        "e\u015Fti",
-        "e\u015Fte",
-        "\u0103\u015Fti",
-        "\u0103\u015Fte",
+        "e\u015fti",
+        "e\u015fte",
+        "\u0103\u015fti",
+        "\u0103\u015fte",
         "ea\u0163i",
         "ia\u0163i",
         "ar\u0103m",
         "ur\u0103m",
         "ir\u0103m",
-        "\xE2r\u0103m",
+        "\xe2r\u0103m",
         "asem",
         "isem",
-        "\xE2sem",
+        "\xe2sem",
         "usem",
-        "se\u015Fi",
+        "se\u015fi",
         "ser\u0103",
         "sese",
         "are",
         "ere",
         "ire",
-        "\xE2re",
+        "\xe2re",
         "ind",
-        "\xE2nd",
+        "\xe2nd",
         "eze",
         "ezi",
         "esc",
@@ -218,17 +217,17 @@ class RomanianStemmer(_StandardStemmer):
         "iam",
         "iai",
         "iau",
-        "a\u015Fi",
+        "a\u015fi",
         "ar\u0103",
-        "u\u015Fi",
+        "u\u015fi",
         "ur\u0103",
-        "i\u015Fi",
+        "i\u015fi",
         "ir\u0103",
-        "\xE2\u015Fi",
+        "\xe2\u015fi",
         "\xe2r\u0103",
         "ase",
         "ise",
-        "\xE2se",
+        "\xe2se",
         "use",
         "a\u0163i",
         "e\u0163i",
@@ -242,11 +241,11 @@ class RomanianStemmer(_StandardStemmer):
         "ea",
         "ia",
         "ui",
-        "\xE2i",
+        "\xe2i",
         "\u0103m",
         "em",
         "im",
-        "\xE2m",
+        "\xe2m",
         "se",
     )
 
@@ -423,7 +422,7 @@ class RomanianStemmer(_StandardStemmer):
                         "iste",
                         "isti",
                         "ist\u0103",
-                        "i\u015Fti",
+                        "i\u015fti",
                     ):
                         word = "".join((word[: -len(suffix)], "ist"))
 
@@ -441,22 +440,22 @@ class RomanianStemmer(_StandardStemmer):
                                 "seser\u0103\u0163i",
                                 "seser\u0103m",
                                 "ser\u0103\u0163i",
-                                "sese\u015Fi",
+                                "sese\u015fi",
                                 "seser\u0103",
                                 "ser\u0103m",
                                 "sesem",
-                                "se\u015Fi",
+                                "se\u015fi",
                                 "ser\u0103",
                                 "sese",
                                 "a\u0163i",
                                 "e\u0163i",
                                 "i\u0163i",
-                                "\xE2\u0163i",
+                                "\xe2\u0163i",
                                 "sei",
                                 "\u0103m",
                                 "em",
                                 "im",
-                                "\xE2m",
+                                "\xe2m",
                                 "se",
                             ):
                                 word = word[: -len(suffix)]
@@ -465,7 +464,7 @@ class RomanianStemmer(_StandardStemmer):
                                 if (
                                     not rv.startswith(suffix)
                                     and rv[rv.index(suffix) - 1]
-                                    not in "aeio\u0103\xE2\xEE"
+                                    not in "aeio\u0103\xe2\xee"
                                 ):
                                     word = word[: -len(suffix)]
                             break

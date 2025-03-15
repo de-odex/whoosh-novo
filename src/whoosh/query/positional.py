@@ -164,16 +164,10 @@ class Phrase(qcore.Query):
         )
 
     def __repr__(self):
-        return "{}({!r}, {!r}, slop={}, boost={:f})".format(
-            self.__class__.__name__,
-            self.fieldname,
-            self.words,
-            self.slop,
-            self.boost,
-        )
+        return f"{self.__class__.__name__}({self.fieldname!r}, {self.words!r}, slop={self.slop}, boost={self.boost:f})"
 
     def __str__(self):
-        return f"{self.fieldname}:\"{' '.join(self.words)}\""
+        return f'{self.fieldname}:"{" ".join(self.words)}"'
 
     def __hash__(self):
         h = hash(self.fieldname) ^ hash(self.slop) ^ hash(self.boost)

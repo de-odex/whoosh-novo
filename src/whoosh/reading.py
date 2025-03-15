@@ -25,8 +25,7 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Matt Chaput.
 
-"""This module contains classes that allow reading from an index.
-"""
+"""This module contains classes that allow reading from an index."""
 
 from abc import abstractmethod
 from bisect import bisect_right

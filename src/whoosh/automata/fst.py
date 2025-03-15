@@ -38,7 +38,6 @@ Whoosh uses these structures to store a directed acyclic word graph (DAWG) for
 use in (at least) spell checking.
 """
 
-
 import copy
 import sys
 from array import array

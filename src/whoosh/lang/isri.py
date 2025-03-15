@@ -114,7 +114,7 @@ class ISRIStemmer:
         self.pr4 = {
             0: ["\u0645"],
             1: ["\u0627"],
-            2: ["\u0627", "\u0648", "\u064A"],
+            2: ["\u0627", "\u0648", "\u064a"],
             3: ["\u0629"],
         }  # groups of length four patterns
         self.pr53 = {
@@ -127,7 +127,7 @@ class ISRIStemmer:
             6: ["\u0627", "\u0645"],
         }  # Groups of length five patterns and length three roots
 
-        self.re_short_vowels = re.compile("[\u064B-\u0652]")
+        self.re_short_vowels = re.compile("[\u064b-\u0652]")
         self.re_hamza = re.compile("[\u0621\u0624\u0626]")
         self.re_intial_hamza = re.compile("^[\u0622\u0623\u0625]")
 

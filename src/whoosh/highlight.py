@@ -48,7 +48,6 @@ The highlighting system has four main elements.
 See :doc:`/highlight` for more information.
 """
 
-
 from collections import deque
 from heapq import nlargest
 from html import escape as htmlescape

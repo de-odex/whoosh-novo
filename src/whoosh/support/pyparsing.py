@@ -1900,15 +1900,9 @@ class Word(Token):
             if self.body_charsOrig == self.init_charsOrig:
                 self.reString = f"[{_escape_regex_range_chars(self.init_charsOrig)}]+"
             elif len(self.body_charsOrig) == 1:
-                self.reString = "{}[{}]*".format(
-                    re.escape(self.init_charsOrig),
-                    _escape_regex_range_chars(self.body_charsOrig),
-                )
+                self.reString = f"{re.escape(self.init_charsOrig)}[{_escape_regex_range_chars(self.body_charsOrig)}]*"
             else:
-                self.reString = "[{}][{}]*".format(
-                    _escape_regex_range_chars(self.init_charsOrig),
-                    _escape_regex_range_chars(self.body_charsOrig),
-                )
+                self.reString = f"[{_escape_regex_range_chars(self.init_charsOrig)}][{_escape_regex_range_chars(self.body_charsOrig)}]*"
             if self.as_keyword:
                 self.reString = r"\b" + self.reString + r"\b"
             try:

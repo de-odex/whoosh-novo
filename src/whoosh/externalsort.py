@@ -29,7 +29,6 @@
 This module implements a general external merge sort for Python objects.
 """
 
-
 import os
 import tempfile
 from heapq import heapify, heappop, heapreplace

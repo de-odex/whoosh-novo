@@ -2,7 +2,6 @@
 
 
 class _ScandinavianStemmer:
-
     """
     This subclass encapsulates a method for defining the string region R1.
     It is used by the Danish, Norwegian, and Swedish stemmer.

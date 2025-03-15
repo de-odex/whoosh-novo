@@ -220,12 +220,7 @@ class ColumnCategorizer(Categorizer):
         self._creader = None
 
     def __repr__(self):
-        return "{}({!r}, {!r}, reverse={!r})".format(
-            self.__class__.__name__,
-            self._fieldobj,
-            self._fieldname,
-            self._reverse,
-        )
+        return f"{self.__class__.__name__}({self._fieldobj!r}, {self._fieldname!r}, reverse={self._reverse!r})"
 
     def set_searcher(self, segment_searcher, docoffset):
         r = segment_searcher.reader()

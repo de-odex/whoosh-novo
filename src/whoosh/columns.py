@@ -46,7 +46,6 @@ provides two important methods: ``writer()`` to return a ``ColumnWriter`` object
 and ``reader()`` to return a ``ColumnReader`` object.
 """
 
-
 import struct
 import warnings
 from array import array

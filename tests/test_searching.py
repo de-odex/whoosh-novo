@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from itertools import permutations, zip_longest
 
 import pytest
+
 from whoosh import analysis, fields, index, qparser, query, scoring
 from whoosh.codec.whoosh3 import W3Codec
 from whoosh.filedb.filestore import RamStorage
@@ -939,9 +940,9 @@ def test_ngram_phrase():
     writer = ix.writer()
     writer.add_document(
         text=(
-            "\u9AD8\u6821\u307E\u3067\u306F\u6771\u4EAC"
-            "\u3067\u3001\u5927\u5B66\u304B\u3089\u306F"
-            "\u4EAC\u5927\u3067\u3059\u3002"
+            "\u9ad8\u6821\u307e\u3067\u306f\u6771\u4eac"
+            "\u3067\u3001\u5927\u5b66\u304b\u3089\u306f"
+            "\u4eac\u5927\u3067\u3059\u3002"
         ),
         path="sample",
     )
@@ -950,13 +951,13 @@ def test_ngram_phrase():
     with ix.searcher() as s:
         p = qparser.QueryParser("text", schema)
 
-        q = p.parse("\u6771\u4EAC\u5927\u5B66")
+        q = p.parse("\u6771\u4eac\u5927\u5b66")
         assert len(s.search(q)) == 1
 
-        q = p.parse('"\u6771\u4EAC\u5927\u5B66"')
+        q = p.parse('"\u6771\u4eac\u5927\u5b66"')
         assert len(s.search(q)) == 0
 
-        q = p.parse('"\u306F\u6771\u4EAC\u3067"')
+        q = p.parse('"\u306f\u6771\u4eac\u3067"')
         assert len(s.search(q)) == 1
 
 

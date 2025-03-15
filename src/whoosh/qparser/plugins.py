@@ -144,7 +144,7 @@ class WildcardPlugin(TaggingPlugin):
     # \u055E = Armenian question mark
     # \u061F = Arabic question mark
     # \u1367 = Ethiopic question mark
-    qmarks = "?\u055E\u061F\u1367"
+    qmarks = "?\u055e\u061f\u1367"
     expr = f"(?P<text>[*{qmarks}])"
 
     def filters(self, parser):

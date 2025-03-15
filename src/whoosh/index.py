@@ -29,7 +29,6 @@
 an index.
 """
 
-
 import os.path
 import pickle
 import re

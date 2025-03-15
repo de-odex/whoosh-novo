@@ -163,7 +163,7 @@ class EnglishStemmer(_StandardStemmer):
         word = (
             word.replace("\u2019", "\x27")
             .replace("\u2018", "\x27")
-            .replace("\u201B", "\x27")
+            .replace("\u201b", "\x27")
         )
 
         if word.startswith("\x27"):

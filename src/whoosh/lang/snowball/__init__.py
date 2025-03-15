@@ -38,6 +38,7 @@ Snowball, because he invented a programming language with this name for
 creating new stemming algorithms. There is more information available at
 http://snowball.tartarus.org/
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

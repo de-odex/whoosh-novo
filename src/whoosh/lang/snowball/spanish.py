@@ -2,7 +2,6 @@ from .bases import _StandardStemmer
 
 
 class SpanishStemmer(_StandardStemmer):
-
     """
     The Spanish Snowball stemmer.
 
@@ -24,7 +23,7 @@ class SpanishStemmer(_StandardStemmer):
 
     """
 
-    __vowels = "aeiou\xE1\xE9\xED\xF3\xFA\xFC"
+    __vowels = "aeiou\xe1\xe9\xed\xf3\xfa\xfc"
     __step0_suffixes = (
         "selas",
         "selos",
@@ -50,7 +49,7 @@ class SpanishStemmer(_StandardStemmer):
         "adoras",
         "adores",
         "ancias",
-        "log\xEDas",
+        "log\xedas",
         "encias",
         "amente",
         "idades",
@@ -60,10 +59,10 @@ class SpanishStemmer(_StandardStemmer):
         "ibles",
         "istas",
         "adora",
-        "aci\xF3n",
+        "aci\xf3n",
         "antes",
         "ancia",
-        "log\xEDa",
+        "log\xeda",
         "uci\xf3n",
         "encia",
         "mente",
@@ -100,36 +99,36 @@ class SpanishStemmer(_StandardStemmer):
         "ya",
         "ye",
         "yo",
-        "y\xF3",
+        "y\xf3",
     )
     __step2b_suffixes = (
-        "ar\xEDamos",
-        "er\xEDamos",
-        "ir\xEDamos",
-        "i\xE9ramos",
-        "i\xE9semos",
-        "ar\xEDais",
+        "ar\xedamos",
+        "er\xedamos",
+        "ir\xedamos",
+        "i\xe9ramos",
+        "i\xe9semos",
+        "ar\xedais",
         "aremos",
-        "er\xEDais",
+        "er\xedais",
         "eremos",
-        "ir\xEDais",
+        "ir\xedais",
         "iremos",
         "ierais",
         "ieseis",
         "asteis",
         "isteis",
-        "\xE1bamos",
-        "\xE1ramos",
-        "\xE1semos",
-        "ar\xEDan",
-        "ar\xEDas",
-        "ar\xE9is",
-        "er\xEDan",
-        "er\xEDas",
-        "er\xE9is",
-        "ir\xEDan",
-        "ir\xEDas",
-        "ir\xE9is",
+        "\xe1bamos",
+        "\xe1ramos",
+        "\xe1semos",
+        "ar\xedan",
+        "ar\xedas",
+        "ar\xe9is",
+        "er\xedan",
+        "er\xedas",
+        "er\xe9is",
+        "ir\xedan",
+        "ir\xedas",
+        "ir\xe9is",
         "ieran",
         "iesen",
         "ieron",
@@ -139,16 +138,16 @@ class SpanishStemmer(_StandardStemmer):
         "abais",
         "arais",
         "aseis",
-        "\xE9amos",
-        "ar\xE1n",
-        "ar\xE1s",
-        "ar\xEDa",
-        "er\xE1n",
-        "er\xE1s",
-        "er\xEDa",
-        "ir\xE1n",
-        "ir\xE1s",
-        "ir\xEDa",
+        "\xe9amos",
+        "ar\xe1n",
+        "ar\xe1s",
+        "ar\xeda",
+        "er\xe1n",
+        "er\xe1s",
+        "er\xeda",
+        "ir\xe1n",
+        "ir\xe1s",
+        "ir\xeda",
         "iera",
         "iese",
         "aste",
@@ -163,44 +162,44 @@ class SpanishStemmer(_StandardStemmer):
         "idas",
         "aras",
         "ases",
-        "\xEDais",
+        "\xedais",
         "ados",
         "idos",
         "amos",
         "imos",
         "emos",
-        "ar\xE1",
-        "ar\xE9",
-        "er\xE1",
-        "er\xE9",
-        "ir\xE1",
-        "ir\xE9",
+        "ar\xe1",
+        "ar\xe9",
+        "er\xe1",
+        "er\xe9",
+        "ir\xe1",
+        "ir\xe9",
         "aba",
         "ada",
         "ida",
         "ara",
         "ase",
-        "\xEDan",
+        "\xedan",
         "ado",
         "ido",
-        "\xEDas",
-        "\xE1is",
-        "\xE9is",
-        "\xEDa",
+        "\xedas",
+        "\xe1is",
+        "\xe9is",
+        "\xeda",
         "ad",
         "ed",
         "id",
         "an",
-        "i\xF3",
+        "i\xf3",
         "ar",
         "er",
         "ir",
         "as",
-        "\xEDs",
+        "\xeds",
         "en",
         "es",
     )
-    __step3_suffixes = ("os", "a", "e", "o", "\xE1", "\xE9", "\xED", "\xF3")
+    __step3_suffixes = ("os", "a", "e", "o", "\xe1", "\xe9", "\xed", "\xf3")
 
     def stem(self, word):
         """
@@ -225,36 +224,36 @@ class SpanishStemmer(_StandardStemmer):
                 if rv.endswith(suffix):
                     if rv[: -len(suffix)].endswith(
                         (
-                            "i\xE9ndo",
-                            "\xE1ndo",
-                            "\xE1r",
-                            "\xE9r",
-                            "\xEDr",
+                            "i\xe9ndo",
+                            "\xe1ndo",
+                            "\xe1r",
+                            "\xe9r",
+                            "\xedr",
                         )
                     ):
                         word = (
                             word[: -len(suffix)]
-                            .replace("\xE1", "a")
-                            .replace("\xE9", "e")
-                            .replace("\xED", "i")
+                            .replace("\xe1", "a")
+                            .replace("\xe9", "e")
+                            .replace("\xed", "i")
                         )
                         r1 = (
                             r1[: -len(suffix)]
-                            .replace("\xE1", "a")
-                            .replace("\xE9", "e")
-                            .replace("\xED", "i")
+                            .replace("\xe1", "a")
+                            .replace("\xe9", "e")
+                            .replace("\xed", "i")
                         )
                         r2 = (
                             r2[: -len(suffix)]
-                            .replace("\xE1", "a")
-                            .replace("\xE9", "e")
-                            .replace("\xED", "i")
+                            .replace("\xe1", "a")
+                            .replace("\xe9", "e")
+                            .replace("\xed", "i")
                         )
                         rv = (
                             rv[: -len(suffix)]
-                            .replace("\xE1", "a")
-                            .replace("\xE9", "e")
-                            .replace("\xED", "i")
+                            .replace("\xe1", "a")
+                            .replace("\xe9", "e")
+                            .replace("\xed", "i")
                         )
 
                     elif rv[: -len(suffix)].endswith(
@@ -301,7 +300,7 @@ class SpanishStemmer(_StandardStemmer):
                     if suffix in (
                         "adora",
                         "ador",
-                        "aci\xF3n",
+                        "aci\xf3n",
                         "adoras",
                         "adores",
                         "aciones",
@@ -318,11 +317,11 @@ class SpanishStemmer(_StandardStemmer):
                             word = word[:-2]
                             rv = rv[:-2]
 
-                    elif suffix in ("log\xEDa", "log\xEDas"):
+                    elif suffix in ("log\xeda", "log\xedas"):
                         word = word.replace(suffix, "log")
                         rv = rv.replace(suffix, "log")
 
-                    elif suffix in ("uci\xF3n", "uciones"):
+                    elif suffix in ("uci\xf3n", "uciones"):
                         word = word.replace(suffix, "u")
                         rv = rv.replace(suffix, "u")
 
@@ -372,7 +371,7 @@ class SpanishStemmer(_StandardStemmer):
             # STEP 2b: Other verb suffixes
             for suffix in self.__step2b_suffixes:
                 if rv.endswith(suffix):
-                    if suffix in ("en", "es", "\xE9is", "emos"):
+                    if suffix in ("en", "es", "\xe9is", "emos"):
                         word = word[: -len(suffix)]
                         rv = rv[: -len(suffix)]
 
@@ -389,7 +388,7 @@ class SpanishStemmer(_StandardStemmer):
         # STEP 3: Residual suffix
         for suffix in self.__step3_suffixes:
             if rv.endswith(suffix):
-                if suffix in ("e", "\xE9"):
+                if suffix in ("e", "\xe9"):
                     word = word[: -len(suffix)]
                     rv = rv[: -len(suffix)]
 
@@ -405,10 +404,10 @@ class SpanishStemmer(_StandardStemmer):
                 break
 
         word = (
-            word.replace("\xE1", "a")
-            .replace("\xE9", "e")
-            .replace("\xED", "i")
-            .replace("\xF3", "o")
-            .replace("\xFA", "u")
+            word.replace("\xe1", "a")
+            .replace("\xe9", "e")
+            .replace("\xed", "i")
+            .replace("\xf3", "o")
+            .replace("\xfa", "u")
         )
         return word

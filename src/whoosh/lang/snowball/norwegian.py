@@ -2,7 +2,6 @@ from .bases import _ScandinavianStemmer
 
 
 class NorwegianStemmer(_ScandinavianStemmer):
-
     """
     The Norwegian Snowball stemmer.
 
@@ -22,7 +21,7 @@ class NorwegianStemmer(_ScandinavianStemmer):
 
     """
 
-    __vowels = "aeiouy\xE6\xE5\xF8"
+    __vowels = "aeiouy\xe6\xe5\xf8"
     __s_ending = "bcdfghjlmnoprtvyz"
     __step1_suffixes = (
         "hetenes",

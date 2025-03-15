@@ -2,7 +2,6 @@ from .bases import _StandardStemmer
 
 
 class GermanStemmer(_StandardStemmer):
-
     """
     The German Snowball stemmer.
 
@@ -24,7 +23,7 @@ class GermanStemmer(_StandardStemmer):
 
     """
 
-    __vowels = "aeiouy\xE4\xF6\xFC"
+    __vowels = "aeiouy\xe4\xf6\xfc"
     __s_ending = "bdfghklmnrt"
     __st_ending = "bdfghklmnt"
 
@@ -44,7 +43,7 @@ class GermanStemmer(_StandardStemmer):
         """
         word = word.lower()
 
-        word = word.replace("\xDF", "ss")
+        word = word.replace("\xdf", "ss")
 
         # Every occurrence of 'u' and 'y'
         # between vowels is put into upper case.
@@ -144,9 +143,9 @@ class GermanStemmer(_StandardStemmer):
         # Umlaut accents are removed and
         # 'u' and 'y' are put back into lower case.
         word = (
-            word.replace("\xE4", "a")
-            .replace("\xF6", "o")
-            .replace("\xFC", "u")
+            word.replace("\xe4", "a")
+            .replace("\xf6", "o")
+            .replace("\xfc", "u")
             .replace("U", "u")
             .replace("Y", "y")
         )

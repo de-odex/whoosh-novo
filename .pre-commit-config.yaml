@@ -12,6 +12,17 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
 
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: "0.6.6"
+    hooks:
+      - id: uv-lock
+      - id: uv-sync
+      - id: uv-export
+        args: ["--frozen", "--output-file=requirements-dev.txt"]
+      - id: uv-export
+        args:
+          ["--frozen", "--no-default-groups", "--output-file=requirements.txt"]
+
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.2.1
     hooks:

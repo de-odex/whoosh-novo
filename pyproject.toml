@@ -72,7 +72,7 @@ omit =[
   "devito/_version.py",
   "examples/*__init__*",
 ]
-concurrency = "multiprocessing"
+concurrency = ["multiprocessing"]
 parallel = true
 
 [tool.coverage.report]

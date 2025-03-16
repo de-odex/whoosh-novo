@@ -288,9 +288,9 @@ def double_metaphone(  # noqa: C901, PLR0912, PLR0915
                         else:
                             next_ = (None,)
             if text[pos + 1] == "J":
-                next = next_ + (2,)  # type: ignore
+                next = (*next_, 2)  # type: ignore
             else:
-                next = next_ + (1,)  # type: ignore
+                next = (*next_, 1)  # type: ignore
         elif ch == "K":
             if text[pos + 1] == "K":
                 next = ("K", 2)
@@ -318,8 +318,7 @@ def double_metaphone(  # noqa: C901, PLR0912, PLR0915
             if (
                 text[pos + 1 : pos + 4] == "UMB"
                 and (pos + 1 == last or text[pos + 2 : pos + 4] == "ER")
-                or text[pos + 1] == "M"
-            ):
+            ) or text[pos + 1] == "M":
                 next = ("M", 2)
             else:
                 next = ("M", 1)
@@ -357,9 +356,9 @@ def double_metaphone(  # noqa: C901, PLR0912, PLR0915
             else:
                 next_ = ("R",)
             if text[pos + 1] == "R":
-                next = next_ + (2,)  # type: ignore
+                next = (*next_, 2)  # type: ignore
             else:
-                next = next_ + (1,)  # type: ignore
+                next = (*next_, 1)  # type: ignore
         elif ch == "S":
             # special cases 'island', 'isle', 'carlisle', 'carlysle'
             if text[pos - 1 : pos + 2] in ["ISL", "YSL"]:
@@ -386,9 +385,9 @@ def double_metaphone(  # noqa: C901, PLR0912, PLR0915
             ] == "Z":
                 next_ = ("S", "X")
                 if text[pos + 1] == "Z":
-                    next = next_ + (2,)
+                    next = (*next_, 2)
                 else:
-                    next = next_ + (1,)
+                    next = (*next_, 1)
             elif text[pos : pos + 2] == "SC":
                 # Schlesinger's rule
                 if text[pos + 2] == "H":
@@ -418,9 +417,9 @@ def double_metaphone(  # noqa: C901, PLR0912, PLR0915
             else:
                 next_ = ("S",)
                 if text[pos + 1] in ["S", "Z"]:
-                    next = next_ + (2,)
+                    next = (*next_, 2)
                 else:
-                    next = next_ + (1,)
+                    next = (*next_, 1)
         elif ch == "T":
             if text[pos : pos + 4] == "TION":
                 next = ("X", 3)
@@ -481,9 +480,9 @@ def double_metaphone(  # noqa: C901, PLR0912, PLR0915
             ):
                 next_ = ("KS",)
             if text[pos + 1] in ["C", "X"]:
-                next = next_ + (2,)  # type: ignore
+                next = (*next_, 2)  # type: ignore
             else:
-                next = next_ + (1,)  # type: ignore
+                next = (*next_, 1)  # type: ignore
         elif ch == "Z":
             # chinese pinyin e.g. 'zhao'
             if text[pos + 1] == "H":
@@ -495,9 +494,9 @@ def double_metaphone(  # noqa: C901, PLR0912, PLR0915
             else:
                 next_ = ("S",)
             if text[pos + 1] == "Z":
-                next = next_ + (2,)  # type: ignore
+                next = (*next_, 2)  # type: ignore
             else:
-                next = next_ + (1,)  # type: ignore
+                next = (*next_, 1)  # type: ignore
         else:
             next = (None, 1)
 

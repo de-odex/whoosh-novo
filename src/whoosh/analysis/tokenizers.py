@@ -164,7 +164,7 @@ class RegexTokenizer(Tokenizer):
         :param tokenize: if True, the text should be tokenized.
         """
 
-        assert isinstance(value, str), f"{repr(value)} is not unicode"
+        assert isinstance(value, str), f"{value!r} is not unicode"
 
         t = Token(positions, chars, removestops=removestops, mode=mode, **kwargs)
         if not tokenize:

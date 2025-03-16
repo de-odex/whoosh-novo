@@ -123,8 +123,7 @@ class StemFilter(Filter):
             self.ignore = frozenset()
         if "lang" not in state:
             self.lang = None
-        if "cache" in state:
-            del state["cache"]
+        state.pop("cache")
 
         self.__dict__.update(state)
         # Set the _stem attribute
@@ -234,8 +233,7 @@ class PyStemmerFilter(StemFilter):
             self.ignore = state["ignores"]
         elif "ignore" not in state:
             self.ignore = frozenset()
-        if "cache" in state:
-            del state["cache"]
+        state.pop("cache")
 
         self.__dict__.update(state)
         # Set the _stem attribute

@@ -235,7 +235,7 @@ stoplists = {
     впрочем хорошо свою этой перед иногда
     лучше чуть том нельзя такой им более
     всегда конечно всю между
-    """.split()
+    """.split()  # noqa: RUF001
     ),
     "es": frozenset(
         """
@@ -291,6 +291,6 @@ stoplists = {
     çünkü da daha de defa diye eğer en gibi hem hep hepsi her hiç için
     ile ise kez ki kim mı mu mü nasıl ne neden nerde nerede nereye niçin
     niye o sanki şey siz şu tüm ve veya ya yani
-    """.split()
+    """.split()  # noqa: RUF001
     ),
 }

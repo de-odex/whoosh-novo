@@ -139,7 +139,7 @@ def step_1b(word, r1):
 
 
 def step_1c(word):
-    if word.endswith("y") or word.endswith("Y") and len(word) > 1:
+    if word.endswith("y") or (word.endswith("Y") and len(word) > 1):
         if word[-2] not in "aeiouy":
             if len(word) > 2:
                 return word[:-1] + "i"

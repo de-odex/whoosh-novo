@@ -425,7 +425,7 @@ class Searcher:
 
         self._kw_to_text(kw)
         if len(kw) == 1:
-            k, v = list(kw.items())[0]
+            k, v = next(iter(kw.items()))
             try:
                 return self.reader().first_id(k, v)
             except TermNotFound:
@@ -1135,9 +1135,8 @@ class Results:
         """
 
         if (name is None or name == "facet") and len(self._facetmaps) == 1:
-            # If there's only one facet, just use it; convert keys() to list
-            # for Python 3
-            name = list(self._facetmaps.keys())[0]
+            # If there's only one facet, just use it
+            name = next(iter(self._facetmaps.keys()))
         elif name not in self._facetmaps:
             raise KeyError(f"{name!r} not in facet names {self.facet_names()!r}")
         return self._facetmaps[name].as_dict()
@@ -1665,7 +1664,7 @@ class ResultsPage:
         if pagenum < 1:
             raise ValueError("pagenum must be >= 1")
 
-        self.pagecount = int(ceil(self.total / pagelen))
+        self.pagecount = ceil(self.total / pagelen)
         self.pagenum = min(self.pagecount, pagenum)
 
         offset = (self.pagenum - 1) * pagelen

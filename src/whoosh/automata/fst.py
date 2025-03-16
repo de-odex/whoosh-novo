@@ -1312,9 +1312,8 @@ class GraphReader(BaseGraphReader):
 
         self._root = None
         if rootname is None and len(self.roots) == 1:
-            # If there's only one root, just use it. Have to wrap a list around
-            # the keys() method here because of Python 3.
-            rootname = list(self.roots.keys())[0]
+            # If there's only one root, just use it.
+            rootname = next(iter(self.roots.keys()))
         if rootname is not None:
             self._root = self.root(rootname)
 

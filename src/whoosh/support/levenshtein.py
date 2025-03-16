@@ -7,7 +7,7 @@ def levenshtein(seq1, seq2, limit=None):
     """Returns the Levenshtein edit distance between two strings."""
 
     oneago = None
-    thisrow = list(range(1, len(seq2) + 1)) + [0]
+    thisrow = [*list(range(1, len(seq2) + 1)), 0]
     for x in range(len(seq1)):
         # Python lists wrap around for negative indices, so put the
         # leftmost column at the *end* of the list. This matches with
@@ -29,7 +29,7 @@ def damerau_levenshtein(seq1, seq2, limit=None):
     """Returns the Damerau-Levenshtein edit distance between two strings."""
 
     oneago = None
-    thisrow = list(range(1, len(seq2) + 1)) + [0]
+    thisrow = [*list(range(1, len(seq2) + 1)), 0]
     for x in range(len(seq1)):
         # Python lists wrap around for negative indices, so put the
         # leftmost column at the *end* of the list. This matches with

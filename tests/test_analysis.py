@@ -55,12 +55,12 @@ def test_composition1():
 def test_composition2():
     ca = analysis.RegexTokenizer() | analysis.LowercaseFilter()
     sa = ca | analysis.StopFilter()
-    assert len(sa), 3
+    assert len(sa) == 3
     assert sa.__class__.__name__ == "CompositeAnalyzer"
     assert sa[0].__class__.__name__ == "RegexTokenizer"
     assert sa[1].__class__.__name__ == "LowercaseFilter"
     assert sa[2].__class__.__name__ == "StopFilter"
-    assert [t.text for t in sa("The ABC 123")], ["abc", "123"]
+    assert [t.text for t in sa("The ABC 123")] == ["abc", "123"]
 
 
 def test_composition3():

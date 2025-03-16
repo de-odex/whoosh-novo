@@ -100,7 +100,7 @@ def MERGE_SMALL(writer, segments):
                 merge_point_found = True
 
     if merge_point_found and len(segments_to_merge) > 1:
-        for seg, i in segments_to_merge:
+        for seg, _i in segments_to_merge:
             reader = SegmentReader(writer.storage, writer.schema, seg)
             writer.add_reader(reader)
             reader.close()

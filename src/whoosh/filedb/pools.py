@@ -444,7 +444,7 @@ class MultiPool(PoolBase):
         t = time.time()
         runs = []
         lenspools = []
-        for task in self.tasks:
+        for _task in self.tasks:
             taskruns, flentotals, flenmaxes, lenspool = rqueue.get()
             runs.extend(taskruns)
             lenspools.append(lenspool)

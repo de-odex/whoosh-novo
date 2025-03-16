@@ -347,7 +347,7 @@ class ZcatalogModule(Module):
         import transaction  # type: ignore # type: ignore @UnresolvedImport
         from zcatalog import catalog  # type: ignore # type: ignore @UnresolvedImport
         from ZODB.DB import DB  # type: ignore # type: ignore @UnresolvedImport
-        from ZODB.FileStorage import (
+        from ZODB.FileStorage import (  # type: ignore # type: ignore @UnresolvedImport
             FileStorage,  # type: ignore # type: ignore @UnresolvedImport
         )
 
@@ -387,7 +387,7 @@ class ZcatalogModule(Module):
 
     def searcher(self):
         from ZODB.DB import DB  # type: ignore # type: ignore @UnresolvedImport
-        from ZODB.FileStorage import (
+        from ZODB.FileStorage import (  # type: ignore # type: ignore @UnresolvedImport
             FileStorage,  # type: ignore # type: ignore @UnresolvedImport
         )
 
@@ -553,7 +553,7 @@ class Bench:
         print(f"Searching {len(terms)} terms with {lib}")
         lib.searcher()
         starttime = now()
-        for r in lib.findterms(terms):
+        for _r in lib.findterms(terms):
             pass
         searchtime = now() - starttime
         print("Search time:", searchtime, "searches/s:", float(len(terms)) / searchtime)

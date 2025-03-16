@@ -1260,7 +1260,7 @@ class BaseGraphReader:
 
     def find_arc(self, address, label, arc=None):
         arc = arc or Arc()
-        for arc in self.iter_arcs(address, arc):
+        for arc in self.iter_arcs(address, arc):  # noqa: B020
             thislabel = arc.label
             if thislabel == label:
                 return arc

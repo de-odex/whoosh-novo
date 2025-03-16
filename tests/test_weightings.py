@@ -45,9 +45,8 @@ def test_all():
                 weighting = wclass(*args, **kwargs)
             else:
                 weighting = wclass()
-        except TypeError:
-            e = sys.exc_info()[1]
-            raise TypeError(f"Error instantiating {wclass!r}: {e}")
+        except TypeError as exc:
+            raise TypeError(f"Error instantiating {wclass!r}") from exc
 
         with ix.searcher(weighting=weighting) as s:
             try:

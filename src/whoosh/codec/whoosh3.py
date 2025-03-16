@@ -647,7 +647,7 @@ class W3TermsReader(base.TermsReader):
         try:
             return W3TermInfo.from_bytes(self._tindex[key])
         except KeyError:
-            raise TermNotFound(f"No term {fieldname}:{tbytes!r}")
+            raise TermNotFound(f"No term {fieldname}:{tbytes!r}") from None
 
     def frequency(self, fieldname, tbytes):
         datapos = self._range_for_key(fieldname, tbytes)[0]

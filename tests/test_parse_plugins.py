@@ -40,8 +40,8 @@ def test_combos():
     for i, plugin in enumerate(pis):
         try:
             pis[i] = plugin(*init_args.get(plugin, ()))
-        except TypeError:
-            raise TypeError(f"Error instantiating {plugin}")
+        except TypeError as exc:
+            raise TypeError(f"Error instantiating {plugin}") from exc
 
     count = 0
     for i, first in enumerate(pis):

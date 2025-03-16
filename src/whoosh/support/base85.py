@@ -29,7 +29,7 @@ def to_base85(x, islong=False):
 
     size = 10 if islong else 5
     rems = ""
-    for i in range(size):
+    for _ in range(size):
         rems = b85chars[x % 85] + rems
         x //= 85
     return rems
@@ -84,7 +84,7 @@ def b85decode(text):
             try:
                 acc = acc * 85 + b85dec[chunk[j]]
             except KeyError:
-                raise TypeError("Bad base85 character at byte %d" % (i + j))
+                raise TypeError("Bad base85 character at byte %d" % (i + j)) from None
         if acc > 4294967295:
             raise OverflowError("Base85 overflow in hunk starting at byte %d" % i)
         out.append(acc)

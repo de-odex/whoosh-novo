@@ -496,7 +496,7 @@ class W2Codec(base.Codec):
         try:
             dawgfile = segment.open_file(storage, self.DAWG_EXT)
         except ValueError:
-            raise NoGraphError
+            raise NoGraphError from None
         return GraphReader(dawgfile)
 
     # Segments and generations
@@ -1085,7 +1085,7 @@ class W2TermsReader(PostingIndexBase):
         try:
             terminfo = self[term]
         except KeyError:
-            raise TermNotFound(f"No term {fieldname}:{text!r}")
+            raise TermNotFound(f"No term {fieldname}:{text!r}") from None
 
         p = terminfo.postings
         if isinstance(p, int):
@@ -1499,7 +1499,7 @@ class StoredFieldReader:
         lengths = array("I")
 
         dbfile.seek(self.directory_offset)
-        for i in range(self.length):
+        for _ in range(self.length):
             dbfile.seek(_LONG_SIZE, 1)
             lengths.append(dbfile.read_uint())
 
@@ -2100,9 +2100,8 @@ class OLD_NUMERIC(NUMERIC):
                 start = self.from_text(self.to_text(start))
             if end is not None:
                 end = self.from_text(self.to_text(end))
-        except ValueError:
-            e = sys.exc_info()[1]
-            raise QueryParserError(e)
+        except ValueError as exc:
+            raise QueryParserError() from exc
 
         return query.NumericRange(
             fieldname, start, end, startexcl, endexcl, boost=boost
@@ -2135,7 +2134,7 @@ class OLD_DATETIME(OLD_NUMERIC):
             elif not isinstance(x, int):
                 raise TypeError()
         except ValueError:
-            raise ValueError(f"DATETIME.to_text can't convert from {x!r}")
+            raise ValueError(f"DATETIME.to_text can't convert from {x!r}") from None
 
         x = OLD_NUMERIC.to_text(self, x, shift=shift)
         return x

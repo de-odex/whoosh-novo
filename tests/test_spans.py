@@ -161,7 +161,7 @@ def test_span_near():
                 first == "bravo" and second == "alfa"
             )
 
-        for orig, sps in test(
+        for orig, _sps in test(
             spans.SpanNear(Term("text", "bravo"), Term("text", "bravo"), ordered=True)
         ):
             text = " ".join(orig)
@@ -171,7 +171,7 @@ def test_span_near():
             spans.SpanNear(Term("text", "alfa"), Term("text", "charlie")),
             Term("text", "echo"),
         )
-        for orig, sps in test(q):
+        for orig, _sps in test(q):
             text = " ".join(orig)
             assert text.find("alfa charlie echo") > -1
 
@@ -180,7 +180,7 @@ def test_span_near():
             Term("text", "echo"),
             ordered=True,
         )
-        for orig, sps in test(q):
+        for orig, _sps in test(q):
             text = " ".join(orig)
             assert text.find("alfa echo") > -1 or text.find("charlie echo") > -1
 

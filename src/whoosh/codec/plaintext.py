@@ -411,7 +411,7 @@ class PlainTermsReader(base.TermsReader, LineReader):
             yield (fieldname, btext), self._find_terminfo()
 
     def items_from(self, fieldname, prefix):
-        for fieldname, btext in self.terms_from(fieldname, prefix):
+        for fieldname, btext in self.terms_from(fieldname, prefix):  # noqa: B020
             yield (fieldname, btext), self._find_terminfo()
 
     def term_info(self, fieldname, btext):

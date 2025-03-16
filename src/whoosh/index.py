@@ -557,15 +557,14 @@ class FileIndex(Index):
                     info.generation,
                     reuse=reuse,
                 )
-            except OSError:
+            except OSError as exc:
                 # Presume that we got a "file not found error" because a writer
                 # deleted one of the files just as we were trying to open it,
                 # and so retry a few times before actually raising the
                 # exception
-                e = sys.exc_info()[1]
                 retries -= 1
                 if retries <= 0:
-                    raise e
+                    raise exc
                 sleep(0.05)
 
 
@@ -709,12 +708,10 @@ class TOC:
             for fieldname, field in schema.items():
                 try:
                     pickle.dumps(field)
-                except pickle.PicklingError:
-                    e = sys.exc_info()[1]
-                    raise pickle.PicklingError(f"{e} {fieldname}={field!r}")
-                except TypeError:
-                    e = sys.exc_info()[1]
-                    raise TypeError(f"{e} {fieldname}={field!r}")
+                except pickle.PicklingError as exc:
+                    raise pickle.PicklingError(f"{fieldname}={field!r}") from exc
+                except TypeError as exc:
+                    raise TypeError(f"{fieldname}={field!r}") from exc
             # Otherwise, re-raise the original exception
             raise
 

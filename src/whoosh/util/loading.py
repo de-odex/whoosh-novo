@@ -47,7 +47,7 @@ class RenamingUnpickler(pickle.Unpickler):
         try:
             obj = find_object(fqname)
         except ImportError:
-            raise ImportError(f"Couldn't find {fqname!r}")
+            raise ImportError(f"Couldn't find {fqname!r}") from None
         return obj
 
 

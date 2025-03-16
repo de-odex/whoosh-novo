@@ -775,7 +775,7 @@ class SegmentReader(IndexReader):
         try:
             return self._terms.term_info(fieldname, text)
         except KeyError:
-            raise TermNotFound(f"{fieldname}:{text!r}")
+            raise TermNotFound(f"{fieldname}:{text!r}") from None
 
     def expand_prefix(self, fieldname, prefix):
         self._test_field(fieldname)

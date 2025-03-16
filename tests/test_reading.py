@@ -474,7 +474,7 @@ def test_cursor():
             assert cur.find(b"inc") == "india"
             assert cur.text() == "india"
 
-            cur.first() == "alfa"
+            assert cur.first() == "alfa"
             assert cur.text() == "alfa"
 
             assert cur.find(b"zulu") is None

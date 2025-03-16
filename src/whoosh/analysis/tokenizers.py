@@ -65,7 +65,7 @@ class Tokenizer(ABC):
     @abstractmethod
     def __call__(self, value: str) -> Generator[Token]: ...
 
-    def clean(self):
+    def clean(self):  # noqa: B027
         # Exists so that bare Tokenizers count as Analyzers
         pass
 

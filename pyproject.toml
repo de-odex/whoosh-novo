@@ -103,24 +103,21 @@ target-version = "py39"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
+  # ===== to re-enable =====
   "A",     # flake8-builtins
   "ANN",   # flake8-annotations
   "ARG",   # flake8-unused-arguments
   "B",     # flake8-bugbear
   "COM",   # flake8-commas
   "CPY",   # flake8-copyright
-  "D",     # pydocstyle
   "E",     # pycodestyle
-  "EM",    # flake8-errmsg
   "ERA",   # eradicate
   "FBT",   # flake8-boolean-trap
-  "FIX",   # flake8-fixme
   "FLY",   # flynt
   "FURB",  # refurb
   "INP",   # flake8-no-pep420
   "ISC",   # flake8-implicit-str-concat
   "N",     # pep8-naming
-  "PD",    # pandas-vet
   "PGH",   # pygrep-hooks
   "PIE",   # flake8-pie
   "PL",    # Pylint
@@ -134,8 +131,49 @@ ignore = [
   "SLF",   # flake8-self
   "T10",   # flake8-debugger
   "T20",   # flake8-print
-  "TD",    # flake8-todos
   "TRY",   # tryceratops
+
+  # ===== undesirable =====
+
+  "D",    # pydocstyle
+  "EM",   # flake8-errmsg
+  "FIX",  # flake8-fixme
+  "TD",   # flake8-todos
+
+  # ===== doesn't apply =====
+
+  "AIR",   # Airflow
+  "FAST",  # FastAPI
+  "PD",    # pandas-vet
+
+  # ===== to be disabled with formatter =====
+
+  # tab-indentation (W191)
+  "W191",
+  # indentation-with-invalid-multiple (E111)
+  "E111",
+  # indentation-with-invalid-multiple-comment (E114)
+  "E114",
+  # over-indented (E117)
+  "E117",
+  # docstring-tab-indentation (D206)
+  "D206",
+  # triple-single-quotes (D300)
+  "D300",
+  # bad-quotes-inline-string (Q000)
+  "Q000",
+  # bad-quotes-multiline-string (Q001)
+  "Q001",
+  # bad-quotes-docstring (Q002)
+  "Q002",
+  # avoidable-escaped-quote (Q003)
+  "Q003",
+  # missing-trailing-comma (COM812)
+  "COM812",
+  # prohibited-trailing-comma (COM819)
+  "COM819",
+
+  # ===== miscellaneous =====
 
   # flake8-executable (EXE)
   # Shebang is present but file is not executable
@@ -158,13 +196,44 @@ ignore = [
   "UP031",
 ]
 
+[tool.ruff.lint.per-file-ignores]
+"src/whoosh/compat.py" = [
+  # Undefined name {name}.
+  "F821",
+]
+"src/whoosh/filedb/filestore.py" = [
+  # Replace aliased errors with OSError
+  "UP024",
+]
+"src/whoosh/util/__init__.py" = [
+  # Undefined name {name}.
+  "F821",
+]
+
+"**/{benchmark,stress,tests}/*" = [
+  # flake8-annotations
+  # (type annotations)
+  "ANN",
+
+  # flake8-no-pep420
+  # File {filename} is part of an implicit namespace package. Add an __init__.py.
+  "INP001",
+
+  # flake8-bandit
+  # Use of assert detected
+  "S101",
+
+  # flake8-self
+  # Private member accessed: {access}
+  "SLF001",
+
+  # flake8-print
+  # (detects print statements)
+  "T20",
+]
+
 [tool.ruff.lint.mccabe]
 max-complexity = 45  # Default is 10
-
-[tool.ruff.lint.per-file-ignores]
-"src/whoosh/compat.py" = ["F821"]
-"src/whoosh/filedb/filestore.py" = ["UP024"]
-"src/whoosh/util/__init__.py" = ["F821"]
 
 [tool.ruff.lint.pylint]
 max-args = 22         # Default is 5

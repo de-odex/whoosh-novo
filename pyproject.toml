@@ -113,7 +113,6 @@ ignore = [
   "E",     # pycodestyle
   "ERA",   # eradicate
   "FBT",   # flake8-boolean-trap
-  "FLY",   # flynt
   "FURB",  # refurb
   "INP",   # flake8-no-pep420
   "ISC",   # flake8-implicit-str-concat

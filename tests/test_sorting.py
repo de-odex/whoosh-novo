@@ -177,7 +177,7 @@ def test_function_facet():
         for w2 in domain:
             for w3 in domain:
                 for w4 in domain:
-                    w.add_document(id=count, text=" ".join((w1, w2, w3, w4)))
+                    w.add_document(id=count, text=f"{w1} {w2} {w3} {w4}")
                     count += 1
     w.commit()
 
@@ -685,7 +685,7 @@ def test_sorting_function():
         for w2 in domain:
             for w3 in domain:
                 for w4 in domain:
-                    w.add_document(id=count, text=" ".join((w1, w2, w3, w4)))
+                    w.add_document(id=count, text=f"{w1} {w2} {w3} {w4}")
                     count += 1
     w.commit()
 

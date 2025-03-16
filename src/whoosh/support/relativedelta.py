@@ -484,7 +484,7 @@ class relativedelta:
         ]:
             value = getattr(self, attr)
             if value is not None:
-                l.append(f"{attr}={repr(value)}")
+                l.append(f"{attr}={value!r}")
         return f"{self.__class__.__name__}({', '.join(l)})"
 
 

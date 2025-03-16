@@ -133,7 +133,7 @@ def max_value(bitcount):
 
 
 def bytes_for_bits(bitcount):
-    r = int(math.ceil((bitcount + 1) / 8.0))
+    r = math.ceil((bitcount + 1) / 8.0)
     return r
 
 

@@ -3,6 +3,8 @@ are useful for doing case and accent folding.
 See :class:`whoosh.analysis.CharsetTokenizer` and :class:`whoosh.analysis.CharsetFilter`.
 """
 
+# ruff: noqa: RUF003
+
 import re
 from collections import defaultdict
 

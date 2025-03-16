@@ -16,7 +16,7 @@ Taghva, K., Elkoury, R., and Coombs, J. 2005. Arabic Stemming without a root
 dictionary. Information Science Research Institute. University of Nevada, Las
 Vegas, USA.
 
-The Information Science Research Institute’s (ISRI) Arabic stemmer shares many
+The Information Science Research Institute's (ISRI) Arabic stemmer shares many
 features with the Khoja stemmer. However, the main difference is that ISRI
 stemmer does not use root dictionary. Also, if a root is not found, ISRI
 stemmer returned normalized form, rather than returning the original
@@ -194,7 +194,7 @@ class ISRIStemmer:
             return self.stm  # exclude stop words from being processed
         self.pre32()  # remove length three and length two prefixes in this order
         self.suf32()  # remove length three and length two suffixes in this order
-        self.waw()  # remove connective ‘و’ if it precedes a word beginning with ‘و’
+        self.waw()  # remove connective 'و' if it precedes a word beginning with 'و'
         self.norm(2)  # normalize initial hamza to bare alif
         if len(self.stm) <= 3:
             return self.stm  # return stem if less than or equal to three
@@ -267,7 +267,7 @@ class ISRIStemmer:
                             return self.stm
 
     def waw(self):
-        """remove connective ‘و’ if it precedes a word beginning with ‘و’"""
+        """remove connective 'و' if it precedes a word beginning with 'و'"""
         if (len(self.stm) >= 4) & (self.stm[:2] == "\u0648\u0648"):
             self.stm = self.stm[1:]
             return self.stm

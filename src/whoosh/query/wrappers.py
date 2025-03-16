@@ -101,7 +101,7 @@ class Not(qcore.Query):
         return other and self.__class__ is other.__class__ and self.query == other.query
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({repr(self.query)})"
+        return f"{self.__class__.__name__}({self.query!r})"
 
     def __str__(self):
         return "NOT " + str(self.query)

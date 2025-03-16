@@ -1121,11 +1121,11 @@ def variations(word):
         if match:
             # Get the named group that matched
             num = int(
-                [
+                next(
                     k
                     for k, v in match.groupdict().items()
                     if v is not None and k.startswith("_g")
-                ][0][2:]
+                )[2:]
             )
             # Get the positional groups for the matched group (all other
             # positional groups are None)

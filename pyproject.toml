@@ -124,7 +124,6 @@ ignore = [
   "PTH",   # flake8-use-pathlib
   "RET",   # flake8-return
   "RSE",   # flake8-raise
-  "RUF",   # Ruff-specific rules
   "S",     # flake8-bandit
   "SIM",   # flake8-simplify
   "SLF",   # flake8-self
@@ -132,12 +131,30 @@ ignore = [
   "T20",   # flake8-print
   "TRY",   # tryceratops
 
+  # flake8-datetimez
+  # DTZ901 Use of `datetime.datetime.min` without timezone information
+  "DTZ901",
+
+  # Ruff
+  # Mutable class attributes should be annotated with `typing.ClassVar`
+  "RUF012",
+  # Unused noqa directive
+  # (current 'noqa's may be needed in the future when we re-enable some of the
+  # currently ignored lint rules)
+  "RUF100",
+
   # ===== undesirable =====
 
   "D",    # pydocstyle
   "EM",   # flake8-errmsg
   "FIX",  # flake8-fixme
   "TD",   # flake8-todos
+
+  # Ruff
+  # __all__ is not sorted
+  "RUF022",
+  # {}.__slots__ is not sorted
+  "RUF023",
 
   # ===== doesn't apply =====
 

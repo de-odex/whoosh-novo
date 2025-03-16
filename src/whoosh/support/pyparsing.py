@@ -409,14 +409,15 @@ class ParseResults:
 
     def __setitem__(self, k, v):
         if isinstance(v, _ParseResultsWithOffset):
-            self.__tokdict[k] = self.__tokdict.get(k, []) + [v]
+            self.__tokdict[k] = [*self.__tokdict.get(k, []), v]
             sub = v[0]
         elif isinstance(k, int):
             self.__toklist[k] = v
             sub = v
         else:
-            self.__tokdict[k] = self.__tokdict.get(k, []) + [
-                _ParseResultsWithOffset(v, 0)
+            self.__tokdict[k] = [
+                *self.__tokdict.get(k, []),
+                _ParseResultsWithOffset(v, 0),
             ]
             sub = v
         if isinstance(sub, ParseResults):
@@ -538,7 +539,7 @@ class ParseResults:
         return self
 
     def __repr__(self):
-        return f"({repr(self.__toklist)}, {repr(self.__tokdict)})"
+        return f"({self.__toklist!r}, {self.__tokdict!r})"
 
     def __str__(self):
         out = "["
@@ -717,7 +718,7 @@ class ParseResults:
             self.__toklist,
             (
                 self.__tokdict.copy(),
-                self.__parent is not None and self.__parent() or None,
+                (self.__parent is not None and self.__parent()) or None,
                 self.__accum_names,
                 self.__name,
             ),
@@ -747,8 +748,8 @@ def col(loc, strg):
     consistent view of the parsed string, the parse location, and line and column
     positions within the parsed string.
     """
-    return (
-        (loc < len(strg) and strg[loc] == "\n") and 1 or loc - strg.rfind("\n", 0, loc)
+    return ((loc < len(strg) and strg[loc] == "\n") and 1) or loc - strg.rfind(
+        "\n", 0, loc
     )
 
 
@@ -1357,7 +1358,7 @@ class ParserElement:
         if isinstance(other, int):
             min_elements, opt_elements = other, 0
         elif isinstance(other, tuple):
-            other = (other + (None, None))[:2]
+            other = ((*other, None, None))[:2]
             if other[0] is None:
                 other = (0, other[1])
             if isinstance(other[0], int) and other[1] is None:
@@ -1705,7 +1706,7 @@ class Literal(Token):
                 stacklevel=2,
             )
             self.__class__ = Empty
-        self.name = f'"{str(self.match)}"'
+        self.name = f'"{self.match!s}"'
         self.errmsg = "Expected " + self.name
         self.may_return_empty = False
         # self.my_exception.msg = self.errmsg
@@ -2038,7 +2039,7 @@ class Regex(Token):
             pass
 
         if self.str_repr is None:
-            self.str_repr = f"Re:({repr(self.pattern)})"
+            self.str_repr = f"Re:({self.pattern!r})"
 
         return self.str_repr
 
@@ -2100,14 +2101,14 @@ class QuotedString(Token):
             self.pattern = r"{}(?:[^{}{}]".format(
                 re.escape(self.quote_char),
                 _escape_regex_range_chars(self.end_quote_char[0]),
-                (esc_char is not None and _escape_regex_range_chars(esc_char) or ""),
+                ((esc_char is not None and _escape_regex_range_chars(esc_char)) or ""),
             )
         else:
             self.flags = 0
             self.pattern = r"{}(?:[^{}\n\r{}]".format(
                 re.escape(self.quote_char),
                 _escape_regex_range_chars(self.end_quote_char[0]),
-                (esc_char is not None and _escape_regex_range_chars(esc_char) or ""),
+                ((esc_char is not None and _escape_regex_range_chars(esc_char)) or ""),
             )
         if len(self.end_quote_char) > 1:
             self.pattern += (
@@ -2150,10 +2151,8 @@ class QuotedString(Token):
 
     def parse_impl(self, instring, loc, do_actions=True):
         result = (
-            instring[loc] == self.firstQuoteChar
-            and self.re.match(instring, loc)
-            or None
-        )
+            instring[loc] == self.firstQuoteChar and self.re.match(instring, loc)
+        ) or None
         if not result:
             exc = self.my_exception
             exc.loc = loc
@@ -2569,7 +2568,7 @@ class ParseExpression(ParserElement):
             pass
 
         if self.str_repr is None:
-            self.str_repr = f"{self.__class__.__name__}:({str(self.exprs)})"
+            self.str_repr = f"{self.__class__.__name__}:({self.exprs!s})"
         return self.str_repr
 
     def streamline(self):
@@ -2971,7 +2970,7 @@ class ParseElementEnhance(ParserElement):
 
     def check_recursion(self, parse_element_list):
         if self in parse_element_list:
-            raise RecursiveGrammarException(parse_element_list + [self])
+            raise RecursiveGrammarException([*parse_element_list, self])
         sub_rec_check_list = parse_element_list[:] + [self]
         if self.expr is not None:
             self.expr.check_recursion(sub_rec_check_list)
@@ -2989,7 +2988,7 @@ class ParseElementEnhance(ParserElement):
             pass
 
         if self.str_repr is None and self.expr is not None:
-            self.str_repr = f"{self.__class__.__name__}:({str(self.expr)})"
+            self.str_repr = f"{self.__class__.__name__}:({self.expr!s})"
         return self.str_repr
 
 
@@ -3516,7 +3515,7 @@ def counted_array(expr):
 
     def count_field_parse_action(s, l, t):
         n = int(t[0])
-        array_expr << (n and Group(And([expr] * n)) or Group(empty))
+        array_expr << ((n and Group(And([expr] * n))) or Group(empty))
         return []
 
     return (
@@ -3744,8 +3743,10 @@ _reBracketExpr = (
 )
 
 _expanded = lambda p: (
-    isinstance(p, ParseResults)
-    and "".join([chr(c) for c in range(ord(p[0]), ord(p[1]) + 1)])
+    (
+        isinstance(p, ParseResults)
+        and "".join([chr(c) for c in range(ord(p[0]), ord(p[1]) + 1)])
+    )
     or p
 )
 
@@ -3986,7 +3987,7 @@ def operator_precedence(base_expr, op_list):
     ret = Forward()
     last_expr = base_expr | (Suppress("(") + ret + Suppress(")"))
     for i, oper_def in enumerate(op_list):
-        op_expr, arity, right_left_assoc, pa = (oper_def + (None,))[:4]
+        op_expr, arity, right_left_assoc, pa = ((*oper_def, None))[:4]
         if arity == 3:
             if op_expr is None or len(op_expr) != 2:
                 raise ValueError(
@@ -4210,7 +4211,7 @@ commonHTMLEntity = Combine(
 ).streamline()
 _htmlEntityMap = dict(zip("gt lt amp nbsp quot".split(), '><& "'))
 replaceHTMLEntity = (
-    lambda t: t.entity in _htmlEntityMap and _htmlEntityMap[t.entity] or None
+    lambda t: (t.entity in _htmlEntityMap and _htmlEntityMap[t.entity]) or None
 )
 
 # it's easy to get these comment structures wrong - they're very common, so may as well make them available

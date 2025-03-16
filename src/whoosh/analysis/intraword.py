@@ -86,7 +86,7 @@ class CompoundWordFilter(Filter):
                 suffix = s[i:]
                 suffix_subs = self.subwords(suffix, memo)
                 if suffix_subs:
-                    result = [prefix] + suffix_subs
+                    result = [prefix, *suffix_subs]
                     memo[s] = result
                     return result
 
@@ -438,10 +438,8 @@ class IntraWordFilter(Filter):
                 this = None
 
             # Is this the same type as the previous part?
-            if (
-                buf
-                and (this == last == 1 and mergewords)
-                or (this == last == 2 and mergenums)
+            if (buf and (this == last == 1 and mergewords)) or (
+                this == last == 2 and mergenums
             ):
                 # This part is the same type as the previous. Add it to the
                 # buffer of parts to merge.

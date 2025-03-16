@@ -161,7 +161,7 @@ class BiWordFilter(Filter):
 
                 # Join the previous token text and the current token text to
                 # form the biword token
-                token.text = "".join((prev_text, sep, text))
+                token.text = f"{prev_text}{sep}{text}"
                 yield token
                 atleastone = True
 

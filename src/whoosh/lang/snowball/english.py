@@ -261,11 +261,11 @@ class EnglishStemmer(_StandardStemmer):
                         r2 = r2[: -len(suffix)]
 
                         if word.endswith(("at", "bl", "iz")):
-                            word = "".join((word, "e"))
-                            r1 = "".join((r1, "e"))
+                            word = f"{word}e"
+                            r1 = f"{r1}e"
 
                             if len(word) > 5 or len(r1) >= 3:
-                                r2 = "".join((r2, "e"))
+                                r2 = f"{r2}e"
 
                         elif word.endswith(self.__double_consonants):
                             word = word[:-1]
@@ -285,13 +285,13 @@ class EnglishStemmer(_StandardStemmer):
                             and word[0] in self.__vowels
                             and word[1] not in self.__vowels
                         ):
-                            word = "".join((word, "e"))
+                            word = f"{word}e"
 
                             if len(r1) > 0:
-                                r1 = "".join((r1, "e"))
+                                r1 = f"{r1}e"
 
                             if len(r2) > 0:
-                                r2 = "".join((r2, "e"))
+                                r2 = f"{r2}e"
                 break
 
         # STEP 1c

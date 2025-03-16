@@ -819,7 +819,7 @@ class HtmlFormatter(Formatter):
         self.attrquote = attrquote
         self.maxclasses = maxclasses
         self.seen = {}
-        self.htmlclass = " ".join((self.classname, self.termclass))
+        self.htmlclass = f"{self.classname} {self.termclass}"
 
     def _text(self, text):
         return htmlescape(text, quote=False)

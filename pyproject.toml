@@ -101,76 +101,60 @@ exclude_also = [
 target-version = "py39"
 
 [tool.ruff.lint]
-select = [
-  "AIR",    # Airflow
-  "ASYNC",  # flake8-async
-  "BLE",    # flake8-blind-except
-  "C4",     # flake8-comprehensions
-  "C90",    # McCabe cyclomatic complexity
-  "DJ",     # flake8-django
-  "DTZ",    # flake8-datetimez
-  "EXE",    # flake8-executable
-  "F",      # Pyflakes
-  "FA",     # flake8-future-annotations
-  "G",      # flake8-logging-format
-  "I",      # isort
-  "ICN",    # flake8-import-conventions
-  "INT",    # flake8-gettext
-  "LOG",    # flake8-logging
-  "NPY",    # NumPy-specific rules
-  "PERF",   # Perflint
-  "PLC",    # Pylint conventions
-  "PLE",    # Pylint errors
-  "PLR091", # Pylint Refactor just for max-args, max-branches, etc.
-  "PYI",    # flake8-pyi
-  "Q",      # flake8-quotes
-  "SLOT",   # flake8-slots
-  "TCH",    # flake8-type-checking
-  "TID",    # flake8-tidy-imports
-  "TRIO",   # flake8-trio
-  "UP",     # pyupgrade
-  "W",      # pycodestyle
-  "YTT",    # flake8-2020
-  # "A",    # flake8-builtins
-  # "ANN",  # flake8-annotations
-  # "ARG",  # flake8-unused-arguments
-  # "B",    # flake8-bugbear
-  # "COM",  # flake8-commas
-  # "CPY",  # flake8-copyright
-  # "D",    # pydocstyle
-  # "E",    # pycodestyle
-  # "EM",   # flake8-errmsg
-  # "ERA",  # eradicate
-  # "FBT",  # flake8-boolean-trap
-  # "FIX",  # flake8-fixme
-  # "FLY",  # flynt
-  # "FURB", # refurb
-  # "INP",  # flake8-no-pep420
-  # "ISC",  # flake8-implicit-str-concat
-  # "N",    # pep8-naming
-  # "PD",   # pandas-vet
-  # "PGH",  # pygrep-hooks
-  # "PIE",  # flake8-pie
-  # "PL",   # Pylint
-  # "PT",   # flake8-pytest-style
-  # "PTH",  # flake8-use-pathlib
-  # "RET",  # flake8-return
-  # "RSE",  # flake8-raise
-  # "RUF",  # Ruff-specific rules
-  # "S",    # flake8-bandit
-  # "SIM",  # flake8-simplify
-  # "SLF",  # flake8-self
-  # "T10",  # flake8-debugger
-  # "T20",  # flake8-print
-  # "TD",   # flake8-todos
-  # "TRY",  # tryceratops
-]
+select = ["ALL"]
 ignore = [
+  "A",     # flake8-builtins
+  "ANN",   # flake8-annotations
+  "ARG",   # flake8-unused-arguments
+  "B",     # flake8-bugbear
+  "COM",   # flake8-commas
+  "CPY",   # flake8-copyright
+  "D",     # pydocstyle
+  "E",     # pycodestyle
+  "EM",    # flake8-errmsg
+  "ERA",   # eradicate
+  "FBT",   # flake8-boolean-trap
+  "FIX",   # flake8-fixme
+  "FLY",   # flynt
+  "FURB",  # refurb
+  "INP",   # flake8-no-pep420
+  "ISC",   # flake8-implicit-str-concat
+  "N",     # pep8-naming
+  "PD",    # pandas-vet
+  "PGH",   # pygrep-hooks
+  "PIE",   # flake8-pie
+  "PL",    # Pylint
+  "PT",    # flake8-pytest-style
+  "PTH",   # flake8-use-pathlib
+  "RET",   # flake8-return
+  "RSE",   # flake8-raise
+  "RUF",   # Ruff-specific rules
+  "S",     # flake8-bandit
+  "SIM",   # flake8-simplify
+  "SLF",   # flake8-self
+  "T10",   # flake8-debugger
+  "T20",   # flake8-print
+  "TD",    # flake8-todos
+  "TRY",   # tryceratops
+
+  # flake8-executable (EXE)
+  # Shebang is present but file is not executable
   "EXE001",
+
+  # Pyflakes
+  # {name} imported but unused; consider using importlib.util.find_spec to test for availability
   "F401",
+  # Redefinition of unused {name} from {row}
   "F811",
+  # Local variable {name} is assigned to but never used
   "F841",
+
+  # Perflint
+  # try-except within a loop incurs performance overhead
   "PERF203",
+
+  # pyupgrade
+  # Use format specifiers instead of percent format
   "UP031",
 ]
 

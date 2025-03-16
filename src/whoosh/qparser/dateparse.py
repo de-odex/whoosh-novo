@@ -556,12 +556,11 @@ class Daynames(Regex):
         for daynum, expr in enumerate(self._dayname_exprs):
             m = expr.match(p.day)
             if m:
-                break
-        current_daynum = dt.weekday()
-        days_delta = relative_days(current_daynum, daynum, dir)
+                current_daynum = dt.weekday()
+                days_delta = relative_days(current_daynum, daynum, dir)
 
-        d = dt.date() + timedelta(days=days_delta)
-        return adatetime(year=d.year, month=d.month, day=d.day)
+                d = dt.date() + timedelta(days=days_delta)
+                return adatetime(year=d.year, month=d.month, day=d.day)
 
 
 class Time12(Regex):

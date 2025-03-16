@@ -284,11 +284,9 @@ class PatternQuery(MultiTerm):
         # Subclasses/instances should set the SPECIAL_CHARS attribute to a set
         # of characters that mark the end of the literal prefix
         specialchars = self.SPECIAL_CHARS
-        i = 0
         for i, char in enumerate(text):
             if char in specialchars:
-                break
-        return text[:i]
+                return text[:i]
 
     def _btexts(self, ixreader):
         field = ixreader.schema[self.fieldname]

@@ -271,7 +271,7 @@ class MpWriter(SegmentWriter):
         if self.docbuffer:
             self._enqueue()
         # Tell the tasks to finish
-        for task in self.tasks:
+        for _task in self.tasks:
             self.jobqueue.put(None)
 
         # Merge existing segments

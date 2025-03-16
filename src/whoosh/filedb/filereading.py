@@ -168,7 +168,7 @@ class SegmentReader(IndexReader):
         try:
             return self.termsindex[(fieldnum, text)]
         except KeyError:
-            raise TermNotFound(f"{fieldnum}:{text!r}")
+            raise TermNotFound(f"{fieldnum}:{text!r}") from None
 
     def doc_frequency(self, fieldid, text):
         try:
@@ -218,7 +218,7 @@ class SegmentReader(IndexReader):
         try:
             offset = self.termsindex[(fieldnum, text)][1]
         except KeyError:
-            raise TermNotFound(f"{fieldid}:{text!r}")
+            raise TermNotFound(f"{fieldid}:{text!r}") from None
 
         if self.segment.deleted and exclude_docs:
             exclude_docs = self.segment.deleted | exclude_docs

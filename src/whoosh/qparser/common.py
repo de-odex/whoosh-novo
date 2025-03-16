@@ -52,7 +52,9 @@ def attach(q, stxnode):
             q.startchar = stxnode.startchar
             q.endchar = stxnode.endchar
         except AttributeError:
-            raise AttributeError(f"Can't set attribute on {q.__class__.__name__}")
+            raise AttributeError(
+                f"Can't set attribute on {q.__class__.__name__}"
+            ) from None
     return q
 
 

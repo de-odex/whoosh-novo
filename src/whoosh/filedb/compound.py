@@ -115,7 +115,7 @@ class CompoundStorage(FileStorage):
         try:
             fileinfo = self._dir[name]
         except KeyError:
-            raise NameError(f"Unknown file {name!r}")
+            raise NameError(f"Unknown file {name!r}") from None
         return fileinfo["offset"], fileinfo["length"]
 
     def open_file(self, name, *args, **kwargs):
@@ -275,7 +275,8 @@ class CompoundWriter:
             substream.close()
 
             def gen():
-                for f, offset, length in substream.blocks:
+                # NOTE: (de-odex) I'm not sure how this should be fixed
+                for f, offset, length in substream.blocks:  # noqa: B023
                     if f is None:
                         f = temp
                     f.seek(offset)

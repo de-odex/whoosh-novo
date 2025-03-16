@@ -23,6 +23,9 @@
 #
 # from __future__ import generators
 
+# disable linting for this massive legacy module...
+# ruff: noqa
+
 __doc__ = """
 pyparsing module - Classes and methods to define and execute parsing grammars
 

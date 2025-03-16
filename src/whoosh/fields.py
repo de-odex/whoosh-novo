@@ -708,7 +708,9 @@ class NUMERIC(FieldType):
         try:
             x = self.numtype(x)
         except OverflowError:
-            raise ValueError(f"Value {x!r} overflowed number type {self.numtype!r}")
+            raise ValueError(
+                f"Value {x!r} overflowed number type {self.numtype!r}"
+            ) from None
 
         if x < self.min_value or x > self.max_value:
             raise ValueError(
@@ -1522,11 +1524,10 @@ class Schema:
         if type(fieldtype) is type:
             try:
                 fieldtype = fieldtype()
-            except:
-                e = sys.exc_info()[1]
+            except Exception as exc:
                 raise FieldConfigurationError(
-                    f"Error: {e} instantiating field {name!r}: {fieldtype!r}"
-                )
+                    f"An exception occurred while instantiating field {name!r}: {fieldtype!r}"
+                ) from exc
 
         if not isinstance(fieldtype, FieldType):
             raise FieldConfigurationError(f"{fieldtype!r} is not a FieldType object")

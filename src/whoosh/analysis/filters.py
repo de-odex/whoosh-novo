@@ -130,8 +130,8 @@ class Filter(ABC):
     def has_morph(self) -> bool:
         return self.is_morph
 
-    def clean(self):
-        # Intentionally left blank
+    def clean(self):  # noqa: B027
+        # Meant to be overridden by subclasses if they need a cleaning step
         pass
 
 

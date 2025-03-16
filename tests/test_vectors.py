@@ -138,6 +138,6 @@ def test_vpst_block_tag():
     ]
 
     with TempIndex(schema) as ix:
-        for i, string in enumerate(content):
+        for _i, string in enumerate(content):
             with ix.writer() as w:
                 w.add_document(text=string)

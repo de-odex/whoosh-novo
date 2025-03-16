@@ -104,10 +104,11 @@ class NumberEncoding:
 
     def get(self, f, pos, i):
         f.seek(pos)
-        n = None
+        # NOTE: (de-odex) i don't exactly understand the intention here
+        num = None
         for n in self.read_nums(f, i + 1):
-            pass
-        return n
+            num = n
+        return num
 
 
 # Fixed width encodings

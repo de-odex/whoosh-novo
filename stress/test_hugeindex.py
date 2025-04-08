@@ -1,6 +1,6 @@
 import struct
 
-from whoosh import formats
+from whoosh import formats, fields
 from whoosh.filedb.filepostings import FilePostingReader, FilePostingWriter
 from whoosh.util.testing import TempStorage
 
@@ -11,7 +11,7 @@ def test_huge_postfile():
 
         gb5 = 5 * 1024 * 1024 * 1024
         pf.seek(gb5)
-        pf.write("\x00\x00\x00\x00")
+        pf.write(b"\x00\x00\x00\x00")
         assert pf.tell() == gb5 + 4
 
         fpw = FilePostingWriter(pf)

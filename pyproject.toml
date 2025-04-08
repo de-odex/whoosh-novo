@@ -77,6 +77,7 @@ omit =[
 ]
 concurrency = ["multiprocessing"]
 parallel = true
+source = ["src/whoosh"]
 
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration
@@ -187,3 +188,14 @@ max-args = 22  # Default is 5
 max-branches = 79  # Default is 12
 max-returns = 16  # Default is 6
 max-statements = 256  # Default is 50
+
+[tool.pytest.ini_options]
+# --tb= traceback print mode (long/short/line/native/no)
+addopts = "-rs --tb=short"
+
+norecursedirs = ".hg .tox _build tmp* env* benchmark stress"
+minversion = "3.0"
+python_files = "test_*.py"
+
+# addopts = "--cov --cov-report=lcov:lcov.info --cov-report=term"
+pythonpath = ["src"]

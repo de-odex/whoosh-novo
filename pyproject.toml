@@ -32,9 +32,7 @@ classifiers = [
   "Topic :: Text Processing :: Indexing",
 ]
 requires-python = ">=3.9"
-dependencies = [
-  "cached-property~=2.0.1",
-]
+dependencies = []
 
 [dependency-groups]
 test = [

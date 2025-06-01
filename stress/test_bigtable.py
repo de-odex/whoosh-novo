@@ -8,7 +8,7 @@ def test_bigtable():
     with TempStorage("bigtable") as st:
 
         def randstring(min, max):
-            return "".join(chr(randint(1, 255)) for _ in range(randint(min, max)))
+            return bytes(randint(1, 255) for _ in range(randint(min, max)))
 
         count = 100000
         samp = {randstring(1, 50): randstring(1, 50) for _ in range(count)}

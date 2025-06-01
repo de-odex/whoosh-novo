@@ -18,11 +18,12 @@ import types
 from array import array
 from struct import Struct
 
+from whoosh.codec.base import PostingsWriter
 from whoosh.matching import Matcher, ReadTooFar
 from whoosh.support import unicode
 from whoosh.system import _FLOAT_SIZE, _INT_SIZE
-from whoosh.util import byte_to_length, length_to_byte, utf8decode, utf8encode
-from whoosh.writing import PostingWriter
+from whoosh.util.numeric import byte_to_length, length_to_byte
+from whoosh.util.text import utf8decode, utf8encode
 
 
 class BlockInfo:
@@ -127,7 +128,7 @@ class BlockInfo:
         )
 
 
-class FilePostingWriter(PostingWriter):
+class FilePostingWriter(PostingsWriter):
     def __init__(self, schema, postfile, stringids=False, blocklimit=128):
         self.schema = schema
         self.postfile = postfile

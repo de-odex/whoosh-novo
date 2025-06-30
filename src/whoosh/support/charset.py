@@ -16,7 +16,7 @@ from collections import defaultdict
 #
 # http://github.com/aristus/accent-folding/blob/master/accent_fold.py
 
-accent_map = {
+str_accent_map: dict[str, str] = {
     "H": "h",  # H -> h
     "I": "i",  # I -> i
     "J": "j",  # J -> j
@@ -728,7 +728,7 @@ accent_map = {
 
 # The unicode.translate() method actually requires a dictionary mapping
 # character *numbers* to characters, for some reason.
-accent_map = {ord(k): v for k, v in accent_map.items()}
+accent_map: dict[int, str] = {ord(k): v for k, v in str_accent_map.items()}
 
 
 # This Sphinx charset table taken from http://speeple.com/unicode-maps.txt

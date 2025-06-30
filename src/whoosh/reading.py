@@ -29,10 +29,9 @@
 
 from abc import abstractmethod
 from bisect import bisect_right
+from functools import cached_property
 from heapq import heapify, heappop, heapreplace, nlargest
 from math import log
-
-from cached_property import cached_property
 
 from whoosh import columns
 from whoosh.filedb.filestore import OverlayStorage

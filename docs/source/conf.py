@@ -42,7 +42,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "Whoosh-Reloaded"
+project = "Whoosh-Novo"
 copyright = "2007-2012 Matt Chaput"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -171,7 +171,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "Whoosh-Reloadeddoc"
+htmlhelp_basename = "Whoosh-Novodoc"
 
 
 # -- Options for LaTeX output --------------------------------------------------

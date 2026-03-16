@@ -1,23 +1,9 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/de-odex/whoosh-novo/badge)](https://www.codefactor.io/repository/github/de-odex/whoosh-novo)
 [![codecov](https://codecov.io/gh/de-odex/whoosh-novo/graph/badge.svg?token=RZ426ERMZD)](https://codecov.io/gh/de-odex/whoosh-novo)
-<!-- [![Documentation Status](https://readthedocs.org/projects/whoosh-reloaded/badge/?version=latest)](https://whoosh-reloaded.readthedocs.io/en/latest/?badge=latest) -->
-<!-- [![PyPI version](https://badge.fury.io/py/Whoosh-Reloaded.svg)](https://badge.fury.io/py/Whoosh-Reloaded) [![Downloads](https://pepy.tech/badge/whoosh-reloaded)](https://pepy.tech/project/whoosh-reloaded) [![License](https://img.shields.io/pypi/l/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Wheel](https://img.shields.io/pypi/wheel/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Format](https://img.shields.io/pypi/format/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) [![PyPI - Status](https://img.shields.io/pypi/status/Whoosh-Reloaded)](https://pypi.org/project/Whoosh-Reloaded/) -->
-
-<!-- [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-<!-- [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Sygil-Dev_whoosh-reloaded&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=Sygil-Dev_whoosh-reloaded) -->
-
 <!-- -------------------------------------- -->
 
 > [!IMPORTANT]
-> This repository (**whoosh-novo**) is a fork and continuation of the Whoosh project. [Whoosh-Reloaded](https://github.com/Sygil-Dev/whoosh-reloaded) is mentioned to be actively maintained.
+> This repository (**whoosh-novo**) is a fork and continuation of the Whoosh project, succeeding [Whoosh-Reloaded](https://github.com/Sygil-Dev/whoosh-reloaded) which is no longer maintained.
 
 > [!WARNING]
 > Compatibility will be best-effort, limited to maintained python versions (>=3.9). I am an amateur solo developer; mistakes will probably be made more often than usual.
@@ -63,7 +49,7 @@ Whoosh might be useful in the following circumstances:
 * When an easy-to-use Pythonic interface is more important to you than raw
   speed.
 
-Whoosh was created by Matt Chaput and is maintained currently by the Sygil-Dev Organization. It was created for use in the online help system of Side Effects Software's 3D animation software Houdini. Side Effects Software Inc. graciously agreed to open-source the code.
+Whoosh was created by Matt Chaput. It was originally created for use in the online help system of Side Effects Software's 3D animation software Houdini. Side Effects Software Inc. graciously agreed to open-source the code.
 
 This software is licensed under the terms of the simplified BSD (A.K.A. "two
 clause" or "FreeBSD") license. See LICENSE.txt for information.
@@ -71,21 +57,21 @@ clause" or "FreeBSD") license. See LICENSE.txt for information.
 Installing Whoosh
 =================
 
-If you have ``setuptools`` or ``pip`` installed, you can use ``easy_install``
-or ``pip`` to download and install Whoosh automatically::
+If you have ``pip`` installed, you can use it to download and install
+Whoosh automatically::
 
-    # Install the stable version from Pypi
-    $ pip install whoosh-reloaded
+    # Install the stable version from PyPI
+    $ pip install whoosh-novo
 
     # Install the development version from GitHub.
-    $ pip install git+https://github.com/Sygil-Dev/whoosh-reloaded.git
+    $ pip install git+https://github.com/de-odex/whoosh-novo.git
 
 Getting the source.
 ==================
 
 You can check out the latest version of the source code on GitHub using git:
 
-    $ git clone https://github.com/Sygil-Dev/whoosh-reloaded.git
+    $ git clone https://github.com/de-odex/whoosh-novo.git
 
 Contributing
 ============
@@ -102,23 +88,6 @@ Learning more
 
 * Online Documentation:
 
-  *   [GitHub Pages](https://sygil-dev.github.io/whoosh-reloaded/)
+  * [GitHub Pages](https://de-odex.github.io/whoosh-novo/)
 
-  *   [Read the Docs](https://whoosh-reloaded.readthedocs.io/en/latest/)
-
-* Read the old online documentation at https://docs.red-dove.com/whoosh-reloaded/ (Search work properly).
-
-* Read the old online documentation at https://whoosh-reloaded.readthedocs.org/en/latest/ (Search DOES NOT work).
-
-* File bug reports and issues at https://github.com/Sygil-Dev/whoosh-reloaded/issues
-
-Maintainers
-===========
-
-* [Sygil-Dev Organization](https://github.com/Sygil-Dev)
-* [ZeroCool940711](https://github.com/ZeroCool940711)
-
-Discord Server
-==============
-
-- [Sygil-Dev - Resources](https://discord.gg/H5mftKP5S9)
+* File bug reports and issues at https://github.com/de-odex/whoosh-novo/issues

@@ -8,6 +8,7 @@ on:
     paths:
       - ".github/workflows/nox-test.yml"
       - ".github/workflows/nox-cov.yml"
+      - ".github/workflows/_nox-session.yml"
       - "src/**"
       - "tests/**"
       - "noxfile.py"
@@ -21,6 +22,7 @@ on:
     paths:
       - ".github/workflows/nox-test.yml"
       - ".github/workflows/nox-cov.yml"
+      - ".github/workflows/_nox-session.yml"
       - "src/**"
       - "tests/**"
       - "noxfile.py"
@@ -35,53 +37,15 @@ concurrency:
   group: nox-cov-${{ github.ref }}
   cancel-in-progress: true
 
-# TODO: replace the rest of test.yml
+permissions:
+  contents: read
+
 jobs:
   nox-cov:
-    strategy:
-      fail-fast: false
-      max-parallel: 5
-      matrix:
-        env:
-          - "3.13"
-          - "3.12"
-          - "3.11"
-          - "3.10"
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
-    runs-on: ${{ matrix.os }}
-    env:
-      OS: ${{ matrix.os }}
-      PYTHON: ${{ matrix.env }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Add .local/bin to Windows PATH
-        if: runner.os == 'Windows'
-        shell: bash
-        run: echo "$USERPROFILE/.local/bin" >> $GITHUB_PATH
-      - name: Install nox
-        run: uv tool install --python-preference only-managed --python 3.13 "nox[uv]"
-      - name: Install Python
-        if: matrix.env != '3.13'
-        run: uv python install --python-preference only-managed ${{ matrix.env }}
-      - name: Run test suite
-        run: nox --session cov
-        env:
-          NOXPYTHON: ${{ matrix.env }}
-      - name: Upload results to Codecov
-        uses: codecov/codecov-action@v6
-        with:
-          env_vars: OS,PYTHON
-          fail_ci_if_error: true
-          handle_no_reports_found: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
+    uses: ./.github/workflows/_nox-session.yml
+    with:
+      os: ubuntu-latest
+      python-version: "3.13"
+      session: cov
+      upload-codecov: true
+    secrets: inherit

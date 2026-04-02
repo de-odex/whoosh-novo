@@ -1,0 +1,55 @@
+name: "Reusable Nox Session"
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      python-version:
+        required: true
+        type: string
+      session:
+        required: true
+        type: string
+      upload-codecov:
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  run-nox:
+    name: "${{ inputs.session }} (${{ inputs.os }}, Python ${{ inputs.python-version }})"
+    runs-on: ${{ inputs.os }}
+    env:
+      NOXPYTHON: ${{ inputs.python-version }}
+      OS: ${{ inputs.os }}
+      PYTHON: ${{ inputs.python-version }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Python
+        run: uv python install --python-preference only-managed ${{ inputs.python-version }}
+
+      - name: Run Nox session
+        run: uv tool run --managed-python --python ${{ inputs.python-version }} --from "nox[uv]" nox --session ${{ inputs.session }}
+
+      - name: Upload results to Codecov
+        if: ${{ inputs.upload-codecov }}
+        continue-on-error: true
+        uses: codecov/codecov-action@v6
+        with:
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          handle_no_reports_found: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true

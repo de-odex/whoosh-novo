@@ -2,7 +2,7 @@ from nox import Session, options, project, session
 
 options.default_venv_backend = "uv"
 options.reuse_venv = "yes"
-options.sessions = ["tests"]
+options.sessions = ["test"]
 
 PYPROJECT = project.load_toml("pyproject.toml")
 PYTHON_VERSIONS = project.python_versions(PYPROJECT)
@@ -47,6 +47,5 @@ def cov(session: Session):
         "--cov=.",
         "--cov-branch",
         "--cov-report=xml",
-        "--cov-report=html",
         *test_files,
     )

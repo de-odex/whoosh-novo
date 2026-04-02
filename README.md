@@ -9,6 +9,12 @@ Whoosh-Novo
 [![codecov](https://codecov.io/gh/de-odex/whoosh-novo/graph/badge.svg?token=RZ426ERMZD)](https://codecov.io/gh/de-odex/whoosh-novo)
 [![CodeFactor](https://www.codefactor.io/repository/github/de-odex/whoosh-novo/badge)](https://www.codefactor.io/repository/github/de-odex/whoosh-novo)
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=de-odex_whoosh-novo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=de-odex_whoosh-novo)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=de-odex_whoosh-novo&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=de-odex_whoosh-novo)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=de-odex_whoosh-novo&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=de-odex_whoosh-novo)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=de-odex_whoosh-novo&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=de-odex_whoosh-novo)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=de-odex_whoosh-novo&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=de-odex_whoosh-novo)
+
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![lint: ruff](https://img.shields.io/badge/lint-ruff-informational?logo=ruff)](https://github.com/astral-sh/ruff)
 

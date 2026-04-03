@@ -38,10 +38,17 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Python
-        run: uv python install --python-preference only-managed ${{ inputs.python-version }}
+        shell: pwsh
+        env:
+          INPUT_PYTHON_VERSION: ${{ inputs.python-version }}
+        run: uv python install --python-preference only-managed "$env:INPUT_PYTHON_VERSION"
 
       - name: Run Nox session
-        run: uv tool run --managed-python --python ${{ inputs.python-version }} --from "nox[uv]" nox --session ${{ inputs.session }}
+        shell: pwsh
+        env:
+          INPUT_PYTHON_VERSION: ${{ inputs.python-version }}
+          INPUT_SESSION: ${{ inputs.session }}
+        run: uv tool run --managed-python --python "$env:INPUT_PYTHON_VERSION" --from "nox[uv]" nox --session "$env:INPUT_SESSION"
 
       - name: Upload results to Codecov
         if: ${{ inputs.upload-codecov }}

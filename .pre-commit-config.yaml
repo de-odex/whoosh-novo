@@ -13,7 +13,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: "0.11.2"
+    rev: "0.11.6"
     hooks:
       - id: uv-lock
       - id: uv-sync
@@ -24,7 +24,7 @@ repos:
           ["--frozen", "--no-default-groups", "--output-file=requirements.txt"]
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.15.8
+    rev: v0.15.10
     hooks:
       - id: ruff
         args: [--fix]

@@ -42,7 +42,7 @@ cov = [
 ]
 dev = [
   { include-group = "test" },
-  "nox~=2026.2.9",
+  "nox>=2026.2.9,<2026.5.0",
   "ruff~=0.15.0",
   "flynt~=1.0.2",
   "pre-commit~=4.5.1",

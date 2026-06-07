@@ -53,7 +53,7 @@ jobs:
       - name: Upload results to Codecov
         if: ${{ inputs.upload-codecov }}
         continue-on-error: true
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           env_vars: OS,PYTHON
           fail_ci_if_error: false

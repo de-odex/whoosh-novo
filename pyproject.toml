@@ -29,12 +29,12 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
   "cached-property~=2.0.1",
-  "typing-extensions>=4.12.2,<4.16.0",
+  "typing-extensions>=4.12.2,<4.17.0",
 ]
 
 [dependency-groups]
 test = [
-  "pytest~=9.0.2",
+  "pytest>=9.0.2,<9.2.0",
   "pytest-sugar~=1.1.0",
 ]
 cov = [
@@ -42,10 +42,10 @@ cov = [
 ]
 dev = [
   { include-group = "test" },
-  "nox~=2026.2.9",
-  "ruff~=0.15.0",
+  "nox>=2026.2.9,<2026.9.0",
+  "ruff>=0.15,<0.17",
   "flynt~=1.0.2",
-  "pre-commit~=4.5.1",
+  "pre-commit>=4.5.1,<4.7.0",
 ]
 
 
